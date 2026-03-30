@@ -1290,3 +1290,292 @@
             <select class="n-fb-select"><option># Horas gastas</option></select>
           </div>
           <div>
+            <div style="font-size:0.65rem;color:var(--notion-text2);margin-bottom:0.3rem">3. Qual cálculo?</div>
+            <select class="n-fb-select"><option>Soma</option></select>
+          </div>
+          <div style="background:rgba(78,203,113,0.1);border:1px solid rgba(78,203,113,0.3);border-radius:5px;padding:0.5rem 0.75rem;width:100%">
+            <div style="font-size:0.65rem;color:var(--notion-text2);margin-bottom:0.2rem">Resultado:</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.9rem;color:#4ecb71">27 horas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Resultado no database de Projetos</h3>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">📋 Projetos — com Rollups configurados</span>
+    </div>
+    <div class="mockup-body" style="padding:0">
+      <table class="n-table">
+        <thead>
+          <tr>
+            <th>📄 Projeto</th>
+            <th>↔ Tarefas</th>
+            <th>📊 Total Horas</th>
+            <th>📊 Tarefas Concluídas</th>
+            <th>📊 % Progresso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Redesign Site</td>
+            <td style="color:#4a9eff;font-size:0.72rem">3 páginas</td>
+            <td>27 h</td>
+            <td>1 de 3</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:0.5rem">
+                <div style="flex:1;height:6px;background:var(--notion-border);border-radius:3px">
+                  <div style="width:33%;height:100%;background:#4a9eff;border-radius:3px"></div>
+                </div>
+                <span style="font-size:0.68rem">33%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>App Mobile</td>
+            <td style="color:#4a9eff;font-size:0.72rem">5 páginas</td>
+            <td>89 h</td>
+            <td>2 de 5</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:0.5rem">
+                <div style="flex:1;height:6px;background:var(--notion-border);border-radius:3px">
+                  <div style="width:40%;height:100%;background:#a78bfa;border-radius:3px"></div>
+                </div>
+                <span style="font-size:0.68rem">40%</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Todos os cálculos disponíveis no Rollup</h3>
+
+  <table class="summary-table">
+    <thead><tr><th>Cálculo</th><th>Funciona com</th><th>Retorna</th></tr></thead>
+    <tbody>
+      <tr><td>Count all</td><td>Qualquer</td><td>Número total de itens relacionados</td></tr>
+      <tr><td>Count values</td><td>Qualquer</td><td>Itens com valor não-vazio na propriedade</td></tr>
+      <tr><td>Count unique values</td><td>Qualquer</td><td>Valores distintos</td></tr>
+      <tr><td>Count empty</td><td>Qualquer</td><td>Itens sem valor na propriedade</td></tr>
+      <tr><td>Count not empty</td><td>Qualquer</td><td>Itens com valor preenchido</td></tr>
+      <tr><td>Percent empty / not empty</td><td>Qualquer</td><td>Percentual (útil para progresso)</td></tr>
+      <tr><td>Sum</td><td>Number</td><td>Soma de todos os valores</td></tr>
+      <tr><td>Average</td><td>Number</td><td>Média aritmética</td></tr>
+      <tr><td>Median</td><td>Number</td><td>Mediana</td></tr>
+      <tr><td>Min / Max</td><td>Number, Date</td><td>Menor ou maior valor</td></tr>
+      <tr><td>Range</td><td>Number, Date</td><td>Diferença entre max e min</td></tr>
+      <tr><td>Earliest / Latest date</td><td>Date</td><td>Data mais cedo ou mais tarde</td></tr>
+      <tr><td>Date range</td><td>Date</td><td>Intervalo entre datas</td></tr>
+      <tr><td>Checked / Unchecked</td><td>Checkbox</td><td>Contagem de marcados/desmarcados</td></tr>
+      <tr><td>Percent checked</td><td>Checkbox</td><td>% de itens marcados — ideal para progresso</td></tr>
+      <tr><td>Show original</td><td>Qualquer</td><td>Mostra os valores brutos (lista)</td></tr>
+      <tr><td>Show unique</td><td>Qualquer</td><td>Valores únicos brutos (lista deduplicada)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout green">
+    <span class="callout-icon">💡</span>
+    <strong>Rollup de Rollup:</strong> é possível criar um Rollup que agrega o resultado de outro Rollup — útil para hierarquias de 3 níveis (ex: Portfolio → Projetos → Tarefas). Mas cuidado: a performance pode degradar com muitos itens e camadas.
+  </div>
+
+  <div class="callout">
+    <span class="callout-icon">⚠️</span>
+    <strong>Limitação real:</strong> Rollups não reagem a filtros da view em tempo real. Eles agregam <em>todos</em> os itens relacionados, independente do que está visível na view. Para cálculos condicionais, você precisa combinar Rollup + Fórmula.
+  </div>
+</section>
+
+<section class="section" id="formulas">
+  <div class="section-label">07 — Fórmulas</div>
+  <h2 class="section-title">Fórmulas — lógica dentro do database</h2>
+  <p class="section-intro">
+    A propriedade <code>Formula</code> permite cálculos dinâmicos baseados em outras propriedades da mesma entrada. 
+    Com a <strong>Fórmula 2.0</strong> (lançada em 2023), o poder aumentou significativamente — variáveis, 
+    condicionais complexas, e até acesso a itens de Relation.
+  </p>
+
+  <h3>Exemplos práticos</h3>
+
+  <div class="formula-block">
+    <span class="f-comment">// Calcular dias restantes até o prazo</span><br>
+    <span class="f-func">dateBetween</span>(<span class="f-prop">prop("Prazo")</span>, <span class="f-func">now</span>(), <span class="f-string">"days"</span>)
+  </div>
+
+  <div class="formula-block">
+    <span class="f-comment">// Status legível com emoji</span><br>
+    <span class="f-keyword">if</span>(<span class="f-prop">prop("Concluído")</span>, <span class="f-string">"✅ Feito"</span>,<br>
+    &nbsp;&nbsp;<span class="f-keyword">if</span>(<span class="f-prop">prop("Status")</span> == <span class="f-string">"Em andamento"</span>, <span class="f-string">"🔄 Em progresso"</span>,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="f-string">"⏳ Pendente"</span>))
+  </div>
+
+  <div class="formula-block">
+    <span class="f-comment">// Progresso % combinando Rollup e Number</span><br>
+    <span class="f-func">round</span>(<span class="f-prop">prop("Tarefas Concluídas")</span> / <span class="f-prop">prop("Total Tarefas")</span> * 100) + <span class="f-string">"%"</span>
+  </div>
+
+  <div class="formula-block">
+    <span class="f-comment">// Fórmula 2.0 — usando variáveis (let)</span><br>
+    <span class="f-keyword">let</span>(diasRestantes, <span class="f-func">dateBetween</span>(<span class="f-prop">prop("Prazo")</span>, <span class="f-func">now</span>(), <span class="f-string">"days"</span>),<br>
+    &nbsp;&nbsp;<span class="f-keyword">if</span>(diasRestantes &lt; 0, <span class="f-string">"🔴 Atrasado"</span>,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="f-keyword">if</span>(diasRestantes &lt;= 3, <span class="f-string">"🟠 Urgente"</span>,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="f-string">"🟢 No prazo"</span>)))
+  </div>
+
+  <table class="summary-table">
+    <thead><tr><th>Categoria</th><th>Funções principais</th></tr></thead>
+    <tbody>
+      <tr><td>Texto</td><td><code>concat</code>, <code>slice</code>, <code>length</code>, <code>contains</code>, <code>replace</code>, <code>upper</code>, <code>lower</code>, <code>trim</code></td></tr>
+      <tr><td>Número</td><td><code>round</code>, <code>floor</code>, <code>ceil</code>, <code>abs</code>, <code>max</code>, <code>min</code>, <code>mod</code>, <code>sqrt</code></td></tr>
+      <tr><td>Data</td><td><code>now</code>, <code>dateAdd</code>, <code>dateBetween</code>, <code>formatDate</code>, <code>day</code>, <code>month</code>, <code>year</code></td></tr>
+      <tr><td>Lógica</td><td><code>if</code>, <code>and</code>, <code>or</code>, <code>not</code>, <code>empty</code>, <code>ifs</code> (multi-caso)</td></tr>
+      <tr><td>Fórmula 2.0</td><td><code>let</code>, <code>lets</code>, <code>map</code>, <code>filter</code>, <code>find</code>, <code>sort</code>, <code>at</code>, <code>first</code>, <code>last</code></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="section" id="sorts">
+  <div class="section-label">08 — Ordenação</div>
+  <h2 class="section-title">Ordenação (Sort)</h2>
+  <p class="section-intro">
+    Ordenações definem a sequência dos itens na view. Assim como filtros, cada view tem suas próprias ordenações independentes. Você pode empilhar múltiplas ordenações — a primeira tem prioridade.
+  </p>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">Configuração de Ordenação</span>
+    </div>
+    <div class="n-filter-builder">
+      <div class="n-fb-header">Ordenações desta view</div>
+      <div class="n-fb-rule">
+        <span style="color:var(--notion-text2);font-size:0.65rem;width:60px">Ordenar por</span>
+        <select class="n-fb-select"><option>⭐ Prioridade</option></select>
+        <select class="n-fb-select"><option>Crescente (A→Z)</option></select>
+        <span style="color:var(--red);margin-left:auto;cursor:pointer">×</span>
+      </div>
+      <div class="n-fb-rule">
+        <span style="color:var(--notion-text2);font-size:0.65rem;width:60px">Depois por</span>
+        <select class="n-fb-select"><option>📅 Prazo</option></select>
+        <select class="n-fb-select"><option>Crescente (mais próximo)</option></select>
+        <span style="color:var(--red);margin-left:auto;cursor:pointer">×</span>
+      </div>
+      <div class="n-fb-add">+ Adicionar ordenação</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="callout-icon">⚠️</span>
+    <strong>Nota sobre Select/Multi-select:</strong> a ordenação de propriedades <code>Select</code> segue a ordem das opções definida no editor de propriedades — não ordem alfabética por padrão. Você controla isso manualmente reordenando as opções.
+  </div>
+
+  <h3>Agrupamento (Group by)</h3>
+  <p>Além de ordenar, você pode <strong>agrupar</strong> itens por qualquer propriedade — separando visualmente por Status, Responsável, data, etc. Funciona em todas as views exceto Calendar e Timeline.</p>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">⊞ Table — agrupada por Responsável</span>
+    </div>
+    <div class="mockup-body" style="padding:0">
+      <div style="padding:0.6rem 1rem;background:var(--notion-surface);border-bottom:1px solid var(--notion-border);font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--notion-text2);display:flex;align-items:center;gap:0.5rem">
+        <span style="color:#4ecb71">▶</span> Ana Lima <span class="n-board-count">2</span>
+      </div>
+      <table class="n-table">
+        <tbody>
+          <tr><td>Redesign do Site</td><td><span class="n-tag tag-blue">Em andamento</span></td><td>28 Mar</td></tr>
+          <tr><td>Criar wireframes</td><td><span class="n-tag tag-green">Concluído</span></td><td>10 Mar</td></tr>
+        </tbody>
+      </table>
+      <div style="padding:0.6rem 1rem;background:var(--notion-surface);border-bottom:1px solid var(--notion-border);border-top:1px solid var(--notion-border);font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--notion-text2);display:flex;align-items:center;gap:0.5rem">
+        <span style="color:#4a9eff">▶</span> Carlos Mota <span class="n-board-count">1</span>
+      </div>
+      <table class="n-table">
+        <tbody>
+          <tr><td>App Mobile v2</td><td><span class="n-tag tag-yellow">Em revisão</span></td><td>15 Abr</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section style="max-width: 800px; margin: 4rem auto; padding: 3rem 2rem; background: var(--surface2, #222222); border: 1px solid var(--border, #2e2e2e); border-radius: 12px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+  
+  <div style="font-family: 'IBM Plex Mono', var(--font-mono, monospace); font-size: 0.75rem; color: var(--accent, #d4a853); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; font-weight: 600;">
+    Próximo Nível
+  </div>
+  
+  <h2 style="font-family: 'Syne', var(--font-display, sans-serif); font-size: 2.2rem; font-weight: 800; margin-bottom: 1.2rem; color: var(--text, #e8e6e1); line-height: 1.2;">
+    A ferramenta organiza.<br>A execução gera <span style="color: var(--accent, #d4a853); font-style: italic;">Impacto</span>.
+  </h2>
+  
+  <p style="font-size: 1.05rem; color: var(--text2, #9a9590); margin: 0 auto 2.5rem; max-width: 600px; line-height: 1.7;">
+    Você dominou a mecânica da informação. Agora, eleve seu sistema para operar em <strong>foco profundo</strong> e atingir o estado de <strong>Flow</strong> contínuo. Insira seu e-mail para baixar um template avançado de Gestão do Conhecimento (PKM) e acessar frameworks de produtividade de execução impecável.
+  </p>
+  
+  <form action="COLE_O_LINK_DO_SEU_FORMULARIO_AQUI" method="POST" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; max-width: 500px; margin: 0 auto;">
+    
+    <input type="email" name="email" placeholder="Seu e-mail principal" required 
+      style="flex: 1; min-width: 250px; padding: 14px 20px; border: 1px solid var(--border, #2e2e2e); border-radius: 8px; font-size: 1rem; background: var(--surface, #1a1a1a); color: var(--text, #e8e6e1); font-family: inherit; outline: none; transition: border-color 0.2s;">
+    
+    <button type="submit" 
+      style="padding: 14px 28px; background: var(--accent, #d4a853); color: #ffffff; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s; font-family: inherit; white-space: nowrap;">
+      Baixar Template
+    </button>
+    
+  </form>
+  
+  <p style="font-size: 0.8rem; color: var(--text3, #5a5550); margin-top: 1.5rem;">
+    Sem ruído. Apenas engenharia de produtividade, lógica e estruturação técnica.
+  </p>
+
+</section>
+
+<section style="max-width:900px;margin:0 auto;padding:4rem 2rem 5rem;text-align:center">
+  <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;color:var(--text);margin-bottom:0.75rem">
+    Este é o Capítulo I.
+  </div>
+  <p style="color:var(--text2);max-width:500px;margin:0 auto 2rem;font-size:0.9rem">
+    Cobrimos a estrutura completa de bancos de dados: propriedades, views, filtros, ordenação, relações, rollups e fórmulas.
+    Próximos capítulos cobrem automações, templates, API e casos de uso avançados.
+  </p>
+  <div style="display:inline-flex;align-items:center;gap:0.5rem;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent)">
+    <span>⬆</span> <a href="#top" style="color:var(--accent);text-decoration:none">Voltar ao início</a>
+  </div>
+</section>
+
+<a class="back-top" href="#top" title="Voltar ao topo">↑</a>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const pct = (doc.scrollTop / (doc.scrollHeight - doc.clientHeight)) * 100;
+    document.getElementById('progress').style.width = pct + '%';
+  });
+
+  // Active nav
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+        if (active) {
+          active.classList.add('active');
+          active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
