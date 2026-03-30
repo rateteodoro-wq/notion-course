@@ -1516,6 +1516,7 @@
   <p style="font-size: 1.05rem; color: var(--text2, #9a9590); margin: 0 auto 2.5rem; max-width: 600px; line-height: 1.7;">
     Você dominou a mecânica da informação. Agora, eleve seu sistema para operar em <strong>foco profundo</strong> e atingir o estado de <strong>Flow</strong> contínuo. Insira seu e-mail para baixar um template avançado de Gestão do Conhecimento (PKM) e acessar frameworks de produtividade de execução impecável.
   </p>
+  
   <form id="form-captura" action="https://formspree.io/f/meepglle" method="POST" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; max-width: 500px; margin: 0 auto;">
     
     <input type="email" name="email" placeholder="Seu e-mail principal" required 
@@ -1553,4 +1554,103 @@
   // ── MOTOR DE REDIRECIONAMENTO FORMSPREE ──
   document.getElementById("form-captura").addEventListener("submit", function(event) {
     event.preventDefault(); // Trava a tela feia do Formspree
- 
+    
+    var form = event.target;
+    var data = new FormData(form);
+    var btn = document.getElementById("btn-submit");
+    
+    // Feedback visual instantâneo
+    btn.innerHTML = "Acessando...";
+    btn.disabled = true;
+    btn.style.opacity = "0.7";
+
+    // Envia os dados no background
+    fetch(form.action, {
+      method: form.method,
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    }).then(response => {
+      if (response.ok) {
+        // Sucesso: Joga o usuário direto pro Notion
+        window.location.href = "https://hilarious-dandelion-126.notion.site/Sistema-B-sico-1a5e7cdfbf6e83b0ba6a81270ad34ab3";
+      } else {
+        btn.innerHTML = "Erro. Tente de novo.";
+        btn.disabled = false;
+        btn.style.opacity = "1";
+      }
+    }).catch(error => {
+      btn.innerHTML = "Erro de conexão.";
+      btn.disabled = false;
+      btn.style.opacity = "1";
+    });
+  });
+
+  // ── SCRIPTS ORIGINAIS DA PÁGINA ──
+
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const pct = (doc.scrollTop / (doc.scrollHeight - doc.clientHeight)) * 100;
+    document.getElementById('progress').style.width = pct + '%';
+  });
+
+  // Controle de Navegação Avançado
+  const sections = document.querySelectorAll('section[id], .hero[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+  const navContainer = document.querySelector('.nav-links');
+  let isClickScrolling = false; // Trava de segurança para o clique
+
+  // 1. Força a rolagem do clique a ser ininterrupta
+  navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      isClickScrolling = true; 
+      
+      const targetId = this.getAttribute('href');
+      const targetSection = document.querySelector(targetId);
+      
+      // Atualiza o visual do menu imediatamente
+      navLinks.forEach(l => l.classList.remove('active'));
+      this.classList.add('active');
+      
+      // Rola apenas o contêiner do menu (não quebra o scroll da página)
+      navContainer.scrollTo({
+        left: this.offsetLeft - navContainer.offsetWidth / 2 + this.offsetWidth / 2,
+        behavior: 'smooth'
+      });
+
+      // Desce até a seção desejada
+      if (targetSection) {
+        targetSection.scrollIntoView({ behavior: 'smooth' });
+      }
+      
+      // Libera o observador após a viagem terminar (aprox 800ms)
+      setTimeout(() => { isClickScrolling = false; }, 800);
+    });
+  });
+
+  // 2. Observador passivo (para quando o usuário rola a página com o mouse)
+  const observer = new IntersectionObserver((entries) => {
+    if (isClickScrolling) return; // Ignora se estivermos viajando via clique
+    
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+        
+        if (active) {
+          active.classList.add('active');
+          // Cálculo matemático seguro para rolar o menu no eixo X
+          navContainer.scrollTo({
+            left: active.offsetLeft - navContainer.offsetWidth / 2 + active.offsetWidth / 2,
+            behavior: 'smooth'
+          });
+        }
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
