@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notion — Guia de Bancos de Dados</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #222222;
+    --surface3: #2a2a2a;
+    --border: #2e2e2e;
+    --border2: #3a3a3a;
+    --text: #e8e6e1;
+    --text2: #9a9590;
+    --text3: #5a5550;
+    --accent: #d4a853;
+    --accent2: #e8c57a;
+    --blue: #4a9eff;
+    --green: #4ecb71;
+    --red: #ff6b6b;
+    --purple: #a78bfa;
+    --pink: #f472b6;
+    --orange: #fb923c;
+    --notion-bg: #191919;
+    --notion-surface: #212121;
+    --notion-border: #2f2f2f;
+    --notion-text: #e2e2e2;
+    --notion-text2: #9b9b9b;
+    --notion-hover: #2a2a2a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Lora', Georgia, serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15,15,15,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 2rem;
+    height: 52px;
+  }
+
+  .site-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1rem;
+    color: var(--accent); letter-spacing: -0.02em;
+    white-space: nowrap;
+  }
+
+  .nav-links {
+    display: flex; gap: 0; overflow-x: auto;
+    scrollbar-width: none; flex: 1;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+
+  .nav-link {
+    padding: 0 1rem; height: 52px;
+    display: flex; align-items: center;
+    font-family: 'Syne', sans-serif; font-size: 0.75rem; font-weight: 600;
+    color: var(--text3); text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s; white-space: nowrap; cursor: pointer;
+    background: none; border-top: none; border-left: none; border-right: none;
+  }
+  .nav-link:hover { color: var(--text2); }
+  .nav-link.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 5rem 2rem 4rem;
+    max-width: 900px; margin: 0 auto;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+    color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .hero-label::before {
+    content: ''; display: block; width: 2rem; height: 1px; background: var(--accent);
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    line-height: 1.05; letter-spacing: -0.03em;
+    color: var(--text); margin-bottom: 1.5rem;
+  }
+
+  .hero h1 span { color: var(--accent); }
+
+  .hero-desc {
+    font-size: 1.1rem; color: var(--text2);
+    max-width: 600px; line-height: 1.8;
+  }
+
+  .chapter-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem; margin-top: 3rem;
+  }
+
+  .chapter-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem 1.5rem;
+    cursor: pointer; transition: all 0.2s;
+    text-decoration: none; display: block;
+  }
+  .chapter-card:hover { border-color: var(--accent); background: var(--surface2); }
+  
+  .chapter-num {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem;
+    color: var(--accent); letter-spacing: 0.1em; margin-bottom: 0.5rem;
+  }
+  .chapter-title {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem;
+    color: var(--text);
+  }
+  .chapter-sub { font-size: 0.78rem; color: var(--text3); margin-top: 0.25rem; }
+
+  /* ── SECTIONS ── */
+  .section {
+    max-width: 900px; margin: 0 auto;
+    padding: 4rem 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem;
+    color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    letter-spacing: -0.02em; line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  .section-intro {
+    font-size: 1rem; color: var(--text2); max-width: 680px;
+    margin-bottom: 2.5rem; line-height: 1.8;
+  }
+
+  h3 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 1.15rem; color: var(--text);
+    margin: 2.5rem 0 1rem;
+  }
+
+  p { margin-bottom: 1rem; color: var(--text2); font-size: 0.95rem; }
+
+  /* ── NOTION MOCKUPS ── */
+  .mockup-wrap {
+    background: var(--notion-bg);
+    border: 1px solid var(--notion-border);
+    border-radius: 10px; overflow: hidden;
+    margin: 2rem 0;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .mockup-title-bar {
+    background: var(--notion-surface);
+    border-bottom: 1px solid var(--notion-border);
+    padding: 0.6rem 1rem;
+    display: flex; align-items: center; gap: 0.5rem;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
+    color: var(--notion-text2);
+  }
+
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #febc2e; }
+  .dot-g { background: #28c840; }
+
+  .mockup-body { padding: 1.5rem; }
+
+  /* Table mockup */
+  .n-table {
+    width: 100%; border-collapse: collapse;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem;
+  }
+  .n-table th {
+    background: var(--notion-surface);
+    border: 1px solid var(--notion-border);
+    padding: 0.45rem 0.75rem;
+    color: var(--notion-text2); font-weight: 500;
+    text-align: left; white-space: nowrap;
+  }
+  .n-table td {
+    border: 1px solid var(--notion-border);
+    padding: 0.45rem 0.75rem;
+    color: var(--notion-text); vertical-align: middle;
+  }
+  .n-table tr:hover td { background: var(--notion-hover); }
+
+  .n-tag {
+    display: inline-block; padding: 0.15rem 0.55rem;
+    border-radius: 3px; font-size: 0.7rem; font-weight: 500;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .tag-blue { background: rgba(74,158,255,0.15); color: #4a9eff; }
+  .tag-green { background: rgba(78,203,113,0.15); color: #4ecb71; }
+  .tag-red { background: rgba(255,107,107,0.15); color: #ff6b6b; }
+  .tag-purple { background: rgba(167,139,250,0.15); color: #a78bfa; }
+  .tag-orange { background: rgba(251,146,60,0.15); color: #fb923c; }
+  .tag-yellow { background: rgba(212,168,83,0.15); color: #d4a853; }
+
+  .n-checkbox {
+    width: 14px; height: 14px; border-radius: 3px;
+    display: inline-block; vertical-align: middle; margin-right: 4px;
+  }
+  .n-check-done { background: var(--blue); }
+  .n-check-open { border: 1.5px solid var(--notion-border); }
+
+  /* View tabs */
+  .n-view-tabs {
+    display: flex; gap: 0;
+    border-bottom: 1px solid var(--notion-border);
+    padding: 0 1rem; background: var(--notion-surface);
+  }
+  .n-tab {
+    padding: 0.6rem 1rem; font-size: 0.75rem;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--notion-text2); cursor: pointer;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+  }
+  .n-tab.active { color: var(--notion-text); border-bottom-color: var(--blue); }
+  .n-tab-icon { margin-right: 0.35rem; }
+
+  /* Filter bar */
+  .n-filter-bar {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    border-bottom: 1px solid var(--notion-border);
+    background: var(--notion-surface); flex-wrap: wrap;
+  }
+  .n-filter-chip {
+    display: flex; align-items: center; gap: 0.35rem;
+    background: rgba(74,158,255,0.12); border: 1px solid rgba(74,158,255,0.3);
+    border-radius: 4px; padding: 0.2rem 0.6rem;
+    font-size: 0.7rem; font-family: 'IBM Plex Mono', monospace;
+    color: #4a9eff;
+  }
+  .n-filter-label {
+    font-size: 0.68rem; font-family: 'IBM Plex Mono', monospace;
+    color: var(--notion-text2); padding: 0.2rem 0;
+  }
+
+  /* Board mockup */
+  .n-board {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+    gap: 1rem; padding: 1rem;
+  }
+  .n-board-col { background: var(--notion-surface); border-radius: 6px; overflow: hidden; }
+  .n-board-header {
+    padding: 0.6rem 0.8rem;
+    font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 700;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .n-board-count {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem;
+    color: var(--notion-text2);
+    background: var(--notion-border); padding: 0.1rem 0.4rem; border-radius: 3px;
+  }
+  .n-board-card {
+    margin: 0.4rem 0.5rem; background: var(--notion-bg);
+    border: 1px solid var(--notion-border);
+    border-radius: 5px; padding: 0.7rem 0.8rem;
+  }
+  .n-card-title {
+    font-size: 0.78rem; color: var(--notion-text);
+    font-family: 'IBM Plex Mono', monospace; margin-bottom: 0.4rem;
+  }
+  .n-card-meta { font-size: 0.65rem; color: var(--notion-text2); font-family: 'IBM Plex Mono', monospace; }
+
+  /* Gallery mockup */
+  .n-gallery {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
+    gap: 0.75rem; padding: 1rem;
+  }
+  .n-gallery-card {
+    background: var(--notion-surface);
+    border: 1px solid var(--notion-border);
+    border-radius: 6px; overflow: hidden;
+  }
+  .n-gallery-thumb {
+    height: 80px; display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+  }
+  .n-gallery-info { padding: 0.6rem 0.75rem; }
+  .n-gallery-name {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;
+    color: var(--notion-text); margin-bottom: 0.3rem;
+  }
+  .n-gallery-props { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--notion-text2); }
+
+  /* Calendar mockup */
+  .n-calendar { padding: 1rem; }
+  .n-cal-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 0.75rem;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem;
+  }
+  .n-cal-nav { font-size: 1rem; color: var(--notion-text2); cursor: pointer; }
+  .n-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+  .n-cal-day-name {
+    text-align: center; padding: 0.3rem;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem;
+    color: var(--notion-text2);
+  }
+  .n-cal-day {
+    min-height: 60px; background: var(--notion-surface);
+    border: 1px solid var(--notion-border); border-radius: 3px; padding: 0.3rem;
+  }
+  .n-cal-day.today { border-color: var(--blue); }
+  .n-cal-day-num {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem;
+    color: var(--notion-text2); margin-bottom: 0.2rem;
+  }
+  .n-cal-event {
+    background: rgba(74,158,255,0.2); border-radius: 2px;
+    padding: 0.1rem 0.3rem; font-size: 0.6rem;
+    font-family: 'IBM Plex Mono', monospace; color: #4a9eff;
+    margin-bottom: 2px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  }
+  .n-cal-event.green { background: rgba(78,203,113,0.2); color: #4ecb71; }
+  .n-cal-event.purple { background: rgba(167,139,250,0.2); color: #a78bfa; }
+
+  /* Timeline mockup */
+  .n-timeline { padding: 1rem; overflow-x: auto; }
+  .n-tl-header {
+    display: grid; grid-template-columns: 150px 1fr;
+    gap: 0; margin-bottom: 0.5rem;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--notion-text2);
+  }
+  .n-tl-months { display: flex; }
+  .n-tl-month { flex: 1; text-align: center; border-left: 1px solid var(--notion-border); padding: 0.2rem; }
+  .n-tl-row {
+    display: grid; grid-template-columns: 150px 1fr;
+    align-items: center; border-top: 1px solid var(--notion-border);
+    min-height: 36px;
+  }
+  .n-tl-name {
+    padding: 0.4rem 0.6rem;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
+    color: var(--notion-text); border-right: 1px solid var(--notion-border);
+  }
+  .n-tl-bar-area { position: relative; height: 36px; }
+  .n-tl-bar {
+    position: absolute; height: 22px; top: 7px;
+    border-radius: 4px; display: flex; align-items: center; padding: 0 0.5rem;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem;
+    font-weight: 500; white-space: nowrap; overflow: hidden;
+  }
+
+  /* List mockup */
+  .n-list { padding: 0.5rem 1rem; }
+  .n-list-row {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 0.5rem 0.5rem; border-bottom: 1px solid var(--notion-border);
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem;
+    color: var(--notion-text);
+  }
+  .n-list-row:hover { background: var(--notion-hover); border-radius: 4px; }
+  .n-list-icon { font-size: 0.9rem; }
+  .n-list-title { flex: 1; }
+  .n-list-prop { font-size: 0.68rem; color: var(--notion-text2); }
+
+  /* Property panel */
+  .n-prop-panel {
+    background: var(--notion-surface);
+    border: 1px solid var(--notion-border);
+    border-radius: 8px; padding: 1rem;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;
+  }
+  .n-prop-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.45rem 0.5rem; border-radius: 4px;
+    color: var(--notion-text2); gap: 1rem;
+  }
+  .n-prop-row:hover { background: var(--notion-hover); color: var(--notion-text); }
+  .n-prop-left { display: flex; align-items: center; gap: 0.6rem; }
+  .n-prop-icon { width: 18px; text-align: center; }
+  .n-prop-name { color: var(--notion-text); }
+  .n-prop-type { font-size: 0.65rem; color: var(--notion-text2); }
+  .n-prop-value { text-align: right; }
+
+  /* Rollup diagram */
+  .rollup-diagram {
+    display: grid; grid-template-columns: 1fr 40px 1fr;
+    gap: 0; align-items: start; margin: 2rem 0;
+  }
+  .rollup-db {
+    background: var(--notion-bg);
+    border: 1px solid var(--notion-border); border-radius: 8px; overflow: hidden;
+  }
+  .rollup-db-header {
+    padding: 0.6rem 0.8rem;
+    background: var(--notion-surface); border-bottom: 1px solid var(--notion-border);
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.8rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .rollup-connector {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding-top: 3rem; gap: 0.3rem;
+    font-size: 0.65rem; font-family: 'IBM Plex Mono', monospace;
+    color: var(--accent); text-align: center;
+  }
+  .rollup-arrow { font-size: 1.2rem; color: var(--accent); }
+
+  /* Filter builder mockup */
+  .n-filter-builder {
+    background: var(--notion-bg);
+    border: 1px solid var(--notion-border); border-radius: 8px;
+    overflow: hidden; font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;
+  }
+  .n-fb-header {
+    padding: 0.6rem 1rem; background: var(--notion-surface);
+    border-bottom: 1px solid var(--notion-border);
+    font-weight: 600; color: var(--notion-text);
+  }
+  .n-fb-rule {
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.5rem 1rem; border-bottom: 1px solid var(--notion-border);
+    color: var(--notion-text2); flex-wrap: wrap;
+  }
+  .n-fb-select {
+    background: var(--notion-surface); border: 1px solid var(--notion-border);
+    border-radius: 4px; padding: 0.2rem 0.6rem; color: var(--notion-text);
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
+  }
+  .n-fb-connector {
+    font-size: 0.65rem; color: var(--blue); font-weight: 600;
+    background: rgba(74,158,255,0.1); border-radius: 3px;
+    padding: 0.1rem 0.4rem;
+  }
+  .n-fb-add {
+    padding: 0.5rem 1rem; color: var(--blue); cursor: pointer;
+    font-size: 0.72rem;
+  }
+
+  /* Explanation cards */
+  .info-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr));
+    gap: 1rem; margin: 2rem 0;
+  }
+  .info-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.25rem;
+  }
+  .info-card-icon {
+    font-size: 1.5rem; margin-bottom: 0.75rem; display: block;
+  }
+  .info-card-title {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem;
+    margin-bottom: 0.5rem; color: var(--text);
+  }
+  .info-card-desc { font-size: 0.82rem; color: var(--text2); line-height: 1.6; }
+
+  /* Callout boxes */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: rgba(212,168,83,0.06);
+    border-radius: 0 6px 6px 0;
+    padding: 1rem 1.25rem; margin: 1.5rem 0;
+    font-size: 0.88rem; color: var(--text2);
+  }
+  .callout-icon { font-size: 1rem; margin-right: 0.5rem; }
+  .callout.blue {
+    border-left-color: var(--blue);
+    background: rgba(74,158,255,0.06);
+  }
+  .callout.green {
+    border-left-color: var(--green);
+    background: rgba(78,203,113,0.06);
+  }
+
+  /* Code inline */
+  code {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.82em;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 3px; padding: 0.1em 0.4em; color: var(--accent2);
+  }
+
+  /* Formula box */
+  .formula-block {
+    background: #0d1117; border: 1px solid var(--border);
+    border-radius: 6px; padding: 1rem 1.25rem;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.82rem;
+    color: #e2e8f0; margin: 1rem 0; overflow-x: auto;
+  }
+  .f-keyword { color: #7dd3fc; }
+  .f-string { color: #86efac; }
+  .f-comment { color: #475569; font-style: italic; }
+  .f-prop { color: #fbbf24; }
+  .f-func { color: #c084fc; }
+
+  /* Divider */
+  .divider {
+    height: 1px; background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 3rem auto; max-width: 200px;
+  }
+
+  /* Summary table */
+  .summary-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.82rem; margin: 1.5rem 0;
+  }
+  .summary-table th {
+    background: var(--surface2); border: 1px solid var(--border);
+    padding: 0.6rem 0.8rem; color: var(--accent);
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.78rem;
+    text-align: left;
+  }
+  .summary-table td {
+    border: 1px solid var(--border); padding: 0.55rem 0.8rem;
+    color: var(--text2); vertical-align: top;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem;
+  }
+  .summary-table tr:hover td { background: var(--surface); }
+  .summary-table td:first-child { color: var(--text); font-weight: 500; }
+
+  /* Scroll to top */
+  .back-top {
+    position: fixed; bottom: 2rem; right: 2rem;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text2); border-radius: 50%;
+    width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; cursor: pointer; transition: all 0.2s; z-index: 50;
+    text-decoration: none;
+  }
+  .back-top:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed; top: 0; left: 0; height: 2px;
+    background: var(--accent); z-index: 200;
+    transition: width 0.1s;
+  }
+
+  @media (max-width: 600px) {
+    .section { padding: 2.5rem 1rem; }
+    .hero { padding: 3rem 1rem 2.5rem; }
+    .rollup-diagram { grid-template-columns: 1fr; }
+    .rollup-connector { flex-direction: row; padding-top: 0; padding: 0.5rem; }
+    .n-board { grid-template-columns: 1fr 1fr; }
+    .n-gallery { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<header class="site-header">
+  <div class="site-logo">NOTION DB</div>
+  <nav class="nav-links">
+    <a class="nav-link active" href="#databases">Banco de Dados</a>
+    <a class="nav-link" href="#properties">Propriedades</a>
+    <a class="nav-link" href="#views">Visualizações</a>
+    <a class="nav-link" href="#filters">Filtros</a>
+    <a class="nav-link" href="#sorts">Ordenação</a>
+    <a class="nav-link" href="#relations">Relações</a>
+    <a class="nav-link" href="#rollups">Rollups</a>
+    <a class="nav-link" href="#formulas">Fórmulas</a>
+  </nav>
+</header>
+
+<div class="hero" id="top">
+  <div class="hero-label">Guia de Referência Completo</div>
+  <h1>Bancos de dados<br>no <span>Notion</span></h1>
+  <p class="hero-desc">
+    Tudo o que você precisa saber sobre bancos de dados, propriedades, visualizações,
+    filtros, relações e rollups — com exemplos visuais reais.
+  </p>
+
+  <div class="chapter-grid">
+    <a class="chapter-card" href="#databases">
+      <div class="chapter-num">01</div>
+      <div class="chapter-title">Banco de Dados</div>
+      <div class="chapter-sub">O que é, quando usar</div>
+    </a>
+    <a class="chapter-card" href="#properties">
+      <div class="chapter-num">02</div>
+      <div class="chapter-title">Propriedades</div>
+      <div class="chapter-sub">20 tipos explicados</div>
+    </a>
+    <a class="chapter-card" href="#views">
+      <div class="chapter-num">03</div>
+      <div class="chapter-title">Visualizações</div>
+      <div class="chapter-sub">Table, Board, Gallery...</div>
+    </a>
+    <a class="chapter-card" href="#filters">
+      <div class="chapter-num">04</div>
+      <div class="chapter-title">Filtros</div>
+      <div class="chapter-sub">Estáticos e dinâmicos</div>
+    </a>
+    <a class="chapter-card" href="#relations">
+      <div class="chapter-num">05</div>
+      <div class="chapter-title">Relações</div>
+      <div class="chapter-sub">Conectando databases</div>
+    </a>
+    <a class="chapter-card" href="#rollups">
+      <div class="chapter-num">06</div>
+      <div class="chapter-title">Rollups</div>
+      <div class="chapter-sub">Agregações avançadas</div>
+    </a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ 01 BANCO DE DADOS ══ -->
+<section class="section" id="databases">
+  <div class="section-label">01 — Fundamento</div>
+  <h2 class="section-title">O que é um Banco de Dados</h2>
+  <p class="section-intro">
+    No Notion, um banco de dados é uma coleção de páginas com propriedades estruturadas — 
+    diferente de uma simples lista ou tabela, cada item é uma página completa com atributos tipados.
+  </p>
+
+  <div class="callout">
+    <span class="callout-icon">💡</span>
+    <strong>Distinção fundamental:</strong> cada linha de um banco de dados Notion é, na verdade, uma página inteira com seu próprio conteúdo. As colunas (propriedades) são apenas metadados dessa página.
+  </div>
+
+  <h3>Como se parece um database na prática</h3>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span>
+      <span class="dot dot-y"></span>
+      <span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">📋 Projetos — Banco de Dados</span>
+    </div>
+    <div class="n-view-tabs">
+      <div class="n-tab active"><span class="n-tab-icon">⊞</span>Tabela</div>
+      <div class="n-tab"><span class="n-tab-icon">⬛</span>Board</div>
+      <div class="n-tab"><span class="n-tab-icon">▦</span>Galeria</div>
+      <div class="n-tab"><span class="n-tab-icon">📅</span>Calendário</div>
+      <div class="n-tab"><span class="n-tab-icon">━</span>Linha do Tempo</div>
+      <div class="n-tab"><span class="n-tab-icon">≡</span>Lista</div>
+    </div>
+    <div class="mockup-body" style="padding:0">
+      <table class="n-table">
+        <thead>
+          <tr>
+            <th>📄 Nome</th>
+            <th>🏷 Status</th>
+            <th>👤 Responsável</th>
+            <th>📅 Prazo</th>
+            <th>⭐ Prioridade</th>
+            <th># Horas Est.</th>
+            <th>✅ Concluído</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Redesign do Site</td>
+            <td><span class="n-tag tag-blue">Em andamento</span></td>
+            <td>Ana Lima</td>
+            <td>28 Mar 2026</td>
+            <td><span class="n-tag tag-red">🔴 Alta</span></td>
+            <td>40</td>
+            <td><span class="n-checkbox n-check-open"></span></td>
+          </tr>
+          <tr>
+            <td>App Mobile v2</td>
+            <td><span class="n-tag tag-yellow">Em revisão</span></td>
+            <td>Carlos Mota</td>
+            <td>15 Abr 2026</td>
+            <td><span class="n-tag tag-orange">🟠 Média</span></td>
+            <td>120</td>
+            <td><span class="n-checkbox n-check-open"></span></td>
+          </tr>
+          <tr>
+            <td>Relatório Q1</td>
+            <td><span class="n-tag tag-green">Concluído</span></td>
+            <td>Mariana S.</td>
+            <td>01 Mar 2026</td>
+            <td><span class="n-tag tag-blue">🔵 Baixa</span></td>
+            <td>8</td>
+            <td><span class="n-checkbox n-check-done"></span></td>
+          </tr>
+          <tr>
+            <td>Integração Stripe</td>
+            <td><span class="n-tag tag-purple">Backlog</span></td>
+            <td>João P.</td>
+            <td>—</td>
+            <td><span class="n-tag tag-red">🔴 Alta</span></td>
+            <td>24</td>
+            <td><span class="n-checkbox n-check-open"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <span class="info-card-icon">📄</span>
+      <div class="info-card-title">Full Page Database</div>
+      <div class="info-card-desc">Banco de dados ocupa a página inteira. Ideal para projetos principais, CRMs, backlogs. Acessado como página própria.</div>
+    </div>
+    <div class="info-card">
+      <span class="info-card-icon">📦</span>
+      <div class="info-card-title">Inline Database</div>
+      <div class="info-card-desc">Banco de dados embutido dentro de outra página, ao lado de texto e outros blocos. Bom para contextos menores.</div>
+    </div>
+    <div class="info-card">
+      <span class="info-card-icon">🔗</span>
+      <div class="info-card-title">Linked View</div>
+      <div class="info-card-desc">Uma janela para um database existente, em outra página. Não duplica dados — apenas exibe com filtros próprios.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ 02 PROPRIEDADES ══ -->
+<section class="section" id="properties">
+  <div class="section-label">02 — Estrutura</div>
+  <h2 class="section-title">Tipos de Propriedades</h2>
+  <p class="section-intro">
+    Propriedades são os campos de cada entrada do banco de dados. 
+    Cada tipo tem comportamento diferente e impacta diretamente no que você pode filtrar, 
+    ordenar e agregar via rollup.
+  </p>
+
+  <h3>Painel de propriedades de uma página</h3>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">Redesign do Site — Propriedades</span>
+    </div>
+    <div class="mockup-body">
+      <div class="n-prop-panel">
+        <div class="n-prop-row">
+          <div class="n-prop-left"><span class="n-prop-icon">🏷</span><span class="n-prop-name">Status</span></div>
+          <div class="n-prop-value"><span class="n-tag tag-blue">Em andamento</span></div>
+        </div>
+        <div class="n-prop-row">
+          <div class="n-prop-left"><span class="n-prop-icon">👤</span><span class="n-prop-name">Responsável</span></div>
+          <div class="n-prop-value" style="font-size:0.72rem;color:var(--notion-text)">Ana Lima</div>
+        </div>
+        <div class="n-prop-row">
+          <div class="n-prop-left"><span class="n-prop-icon">📅</span><span class="n-prop-name">Prazo</span></div>
+          <div class="n-prop-value" style="font-size:0.72rem;color:var(--notion-text)">28 Mar 2026</div>
+        </div>
+        <div class="n-prop-row">
+          <div class="n-prop-left"><span class="n-prop-icon">⭐</span><span class="n-prop-name">Prioridade</span></div>
+          <div class="n-prop-value"><span class="n-tag tag-red">Alta</span></div>
+        </div>
+        <div class="n-prop-row">
+          <div class="n-prop-left"><span class="n-prop-icon">#</span><span class="n-prop-name">Horas Estimadas</span></div>
+          <div class="n-prop-value" style="font-size:0.72rem;color:var(--notion-text)">40</div>
+        </div>
+        <div class="n-prop-row">
+          <div class="n-prop-left"><span class="n-prop-icon">✅</span><span class="n-prop-name">Concluído</span></div>
+          <div class="n-prop-value"><span class="n-checkbox n-check-open" style="width:14px;height:14px;display:inline-block"></span></div>
+        </div>
+        <div class="n-prop-row">
+          <div class="n-prop-left"><span class="n-prop-icon">🔗</span><span class="n-prop-name">Tarefas Filhas</span></div>
+          <div class="n-prop-value" style="font-size:0.72rem;color:#4a9eff">3 páginas</div>
+        </div>
+        <div class="n-prop-row">
+          <div class="n-prop-left"><span class="n-prop-icon">📊</span><span class="n-prop-name">Total Horas Reais</span></div>
+          <div class="n-prop-value" style="font-size:0.72rem;color:var(--notion-text)">27 <span style="color:var(--notion-text2);font-size:0.65rem">(rollup)</span></div>
+        </div>
+        <div class="n-prop-row">
+          <div class="n-prop-left"><span class="n-prop-icon">🔢</span><span class="n-prop-name">ID Único</span></div>
+          <div class="n-prop-value" style="font-size:0.72rem;color:var(--notion-text2)">PRJ-0047</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Guia completo dos tipos de propriedade</h3>
+
+  <table class="summary-table">
+    <thead>
+      <tr>
+        <th>Propriedade</th>
+        <th>Para que serve</th>
+        <th>Pode filtrar?</th>
+        <th>Pode ordenar?</th>
+        <th>Rollup?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>📝 Text</td><td>Texto livre, notas curtas</td><td>Contém / Não contém / Vazio</td><td>Alfa</td><td>—</td></tr>
+      <tr><td># Number</td><td>Valores numéricos, valores com unidade</td><td>= / ≠ / &gt; / &lt; / Entre</td><td>Asc/Desc</td><td>Sum, Avg, Min, Max</td></tr>
+      <tr><td>🔘 Select</td><td>Opção única (status, categoria)</td><td>É / Não é</td><td>Alfa</td><td>Count</td></tr>
+      <tr><td>☑ Multi-select</td><td>Múltiplas tags (habilidades, tópicos)</td><td>Contém / Não contém</td><td>Alfa</td><td>Count</td></tr>
+      <tr><td>📅 Date</td><td>Datas, períodos com início e fim</td><td>Antes / Depois / Período relativo</td><td>Asc/Desc</td><td>—</td></tr>
+      <tr><td>👤 Person</td><td>Membros do workspace</td><td>É / Contém</td><td>Nome alfa</td><td>Count</td></tr>
+      <tr><td>📎 Files</td><td>Uploads e URLs de arquivos</td><td>Vazio / Não vazio</td><td>—</td><td>Count</td></tr>
+      <tr><td>✅ Checkbox</td><td>Booleano, tarefas concluídas</td><td>Marcado / Desmarcado</td><td>Asc/Desc</td><td>Checked, Unchecked</td></tr>
+      <tr><td>🔗 URL</td><td>Links externos</td><td>Contém / Não contém</td><td>—</td><td>—</td></tr>
+      <tr><td>📧 Email</td><td>Endereços de e-mail</td><td>Contém / Igual</td><td>—</td><td>—</td></tr>
+      <tr><td>📞 Phone</td><td>Números de telefone</td><td>Contém / Igual</td><td>—</td><td>—</td></tr>
+      <tr><td>🔢 Formula</td><td>Cálculo baseado em outras props</td><td>Depende do tipo retornado</td><td>Depende</td><td>Sim</td></tr>
+      <tr><td>↔ Relation</td><td>Vínculo com outro database</td><td>Contém / Vazio</td><td>—</td><td>Base para Rollup</td></tr>
+      <tr><td>📊 Rollup</td><td>Agrega valores de database relacionado</td><td>Sim, pelo valor</td><td>Sim</td><td>—</td></tr>
+      <tr><td>🕒 Created time</td><td>Data/hora de criação automática</td><td>Sim</td><td>Asc/Desc</td><td>—</td></tr>
+      <tr><td>✏ Last edited</td><td>Data/hora da última edição</td><td>Sim</td><td>Asc/Desc</td><td>—</td></tr>
+      <tr><td>👤 Created by</td><td>Quem criou o item</td><td>É / Não é</td><td>—</td><td>—</td></tr>
+      <tr><td>✏ Last edited by</td><td>Quem editou por último</td><td>É / Não é</td><td>—</td><td>—</td></tr>
+      <tr><td>🔢 ID</td><td>Número único auto-incremental</td><td>= / ≠</td><td>Asc/Desc</td><td>—</td></tr>
+      <tr><td>🔘 Status</td><td>Versão avançada do Select (grupos: To-do, In progress, Done)</td><td>É / Não é / Grupo</td><td>Alfa</td><td>Count</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout blue">
+    <span class="callout-icon">ℹ️</span>
+    <strong>Status vs Select:</strong> A propriedade <code>Status</code> foi lançada depois do <code>Select</code> e tem uma vantagem: os valores ficam organizados em grupos (<em>Not started</em>, <em>In progress</em>, <em>Done</em>), o que habilita automações nativas e integração com a view de Board automaticamente.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ 03 VISUALIZAÇÕES ══ -->
+<section class="section" id="views">
+  <div class="section-label">03 — Visualizações</div>
+  <h2 class="section-title">Os 6 tipos de View</h2>
+  <p class="section-intro">
+    Um banco de dados pode ter múltiplas views simultâneas — cada uma com seus próprios 
+    filtros, ordenação e propriedades visíveis. Os dados são os mesmos; só a lente muda.
+  </p>
+
+  <!-- TABLE -->
+  <h3>⊞ Table — Tabela</h3>
+  <p>A view mais universal. Ideal para leitura rápida e edição em massa. Suporta ordenação por múltiplas colunas e congelamento de colunas.</p>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">⊞ Table View</span>
+    </div>
+    <div class="mockup-body" style="padding:0">
+      <table class="n-table">
+        <thead>
+          <tr>
+            <th style="min-width:160px">📄 Tarefa</th>
+            <th>🏷 Status</th>
+            <th>📅 Prazo</th>
+            <th># Pontos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Criar wireframes</td><td><span class="n-tag tag-green">Feito</span></td><td>10 Mar</td><td>3</td></tr>
+          <tr><td>Desenvolver API</td><td><span class="n-tag tag-blue">Fazendo</span></td><td>29 Mar</td><td>8</td></tr>
+          <tr><td>Testes QA</td><td><span class="n-tag tag-purple">Backlog</span></td><td>05 Abr</td><td>5</td></tr>
+          <tr><td>Deploy produção</td><td><span class="n-tag tag-purple">Backlog</span></td><td>10 Abr</td><td>2</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- BOARD -->
+  <h3>⬛ Board — Kanban</h3>
+  <p>Organiza itens em colunas por uma propriedade <code>Select</code>, <code>Multi-select</code> ou <code>Status</code>. Drag-and-drop muda o valor da propriedade automaticamente.</p>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">⬛ Board View — agrupado por Status</span>
+    </div>
+    <div class="n-board">
+      <div class="n-board-col">
+        <div class="n-board-header" style="color:#9b9b9b">Backlog <span class="n-board-count">2</span></div>
+        <div class="n-board-card"><div class="n-card-title">Testes QA</div><div class="n-card-meta">05 Abr · 5 pts</div></div>
+        <div class="n-board-card"><div class="n-card-title">Deploy produção</div><div class="n-card-meta">10 Abr · 2 pts</div></div>
+      </div>
+      <div class="n-board-col">
+        <div class="n-board-header" style="color:#4a9eff">Em andamento <span class="n-board-count">1</span></div>
+        <div class="n-board-card"><div class="n-card-title">Desenvolver API</div><div class="n-card-meta">29 Mar · 8 pts</div></div>
+      </div>
+      <div class="n-board-col">
+        <div class="n-board-header" style="color:#4ecb71">Concluído <span class="n-board-count">1</span></div>
+        <div class="n-board-card"><div class="n-card-title">Criar wireframes</div><div class="n-card-meta">10 Mar · 3 pts</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALLERY -->
+  <h3>▦ Gallery — Galeria</h3>
+  <p>Exibe itens como cards visuais com imagem de capa ou ícone. Ideal para portfólios, produtos, receitas, qualquer coisa visualmente orientada.</p>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">▦ Gallery View — Produtos</span>
+    </div>
+    <div class="n-gallery">
+      <div class="n-gallery-card">
+        <div class="n-gallery-thumb" style="background:linear-gradient(135deg,#1e3a5f,#0f1f2e)">📱</div>
+        <div class="n-gallery-info">
+          <div class="n-gallery-name">App Mobile v2</div>
+          <div class="n-gallery-props"><span class="n-tag tag-blue" style="font-size:0.62rem">Em andamento</span></div>
+        </div>
+      </div>
+      <div class="n-gallery-card">
+        <div class="n-gallery-thumb" style="background:linear-gradient(135deg,#1f3a1e,#0f2e0f)">🌐</div>
+        <div class="n-gallery-info">
+          <div class="n-gallery-name">Redesign Site</div>
+          <div class="n-gallery-props"><span class="n-tag tag-yellow" style="font-size:0.62rem">Em revisão</span></div>
+        </div>
+      </div>
+      <div class="n-gallery-card">
+        <div class="n-gallery-thumb" style="background:linear-gradient(135deg,#3a1e1e,#2e0f0f)">📊</div>
+        <div class="n-gallery-info">
+          <div class="n-gallery-name">Dashboard BI</div>
+          <div class="n-gallery-props"><span class="n-tag tag-green" style="font-size:0.62rem">Concluído</span></div>
+        </div>
+      </div>
+      <div class="n-gallery-card">
+        <div class="n-gallery-thumb" style="background:linear-gradient(135deg,#2a1e3a,#180f2e)">🔌</div>
+        <div class="n-gallery-info">
+          <div class="n-gallery-name">API Stripe</div>
+          <div class="n-gallery-props"><span class="n-tag tag-purple" style="font-size:0.62rem">Backlog</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALENDAR -->
+  <h3>📅 Calendar — Calendário</h3>
+  <p>Exibe itens em um calendário baseado em uma propriedade <code>Date</code>. Pode mostrar eventos com início e fim. Alterar a data arrasta o item no calendário.</p>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">📅 Calendar View — Março 2026</span>
+    </div>
+    <div class="n-calendar">
+      <div class="n-cal-header">
+        <span class="n-cal-nav">‹</span>
+        <span style="font-size:0.9rem">Março 2026</span>
+        <span class="n-cal-nav">›</span>
+      </div>
+      <div class="n-cal-grid">
+        <div class="n-cal-day-name">Dom</div><div class="n-cal-day-name">Seg</div>
+        <div class="n-cal-day-name">Ter</div><div class="n-cal-day-name">Qua</div>
+        <div class="n-cal-day-name">Qui</div><div class="n-cal-day-name">Sex</div>
+        <div class="n-cal-day-name">Sáb</div>
+
+        <div class="n-cal-day" style="opacity:0.3"><div class="n-cal-day-num">22</div></div>
+        <div class="n-cal-day" style="opacity:0.3"><div class="n-cal-day-num">23</div></div>
+        <div class="n-cal-day" style="opacity:0.3"><div class="n-cal-day-num">24</div></div>
+        <div class="n-cal-day today"><div class="n-cal-day-num" style="color:#4a9eff">25</div></div>
+        <div class="n-cal-day"><div class="n-cal-day-num">26</div></div>
+        <div class="n-cal-day"><div class="n-cal-day-num">27</div></div>
+        <div class="n-cal-day"><div class="n-cal-day-num">28</div><div class="n-cal-event">Redesign Site</div></div>
+
+        <div class="n-cal-day"><div class="n-cal-day-num">29</div><div class="n-cal-event">API Entrega</div></div>
+        <div class="n-cal-day"><div class="n-cal-day-num">30</div></div>
+        <div class="n-cal-day"><div class="n-cal-day-num">31</div></div>
+        <div class="n-cal-day"><div class="n-cal-day-num">1</div></div>
+        <div class="n-cal-day"><div class="n-cal-day-num">2</div></div>
+        <div class="n-cal-day"><div class="n-cal-day-num">3</div><div class="n-cal-event green">Sprint Review</div></div>
+        <div class="n-cal-day"><div class="n-cal-day-num">4</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <h3>━ Timeline — Linha do Tempo</h3>
+  <p>Exibe itens em um Gantt chart simplificado. Precisa de uma propriedade <code>Date</code> com intervalo (start + end). Ótimo para planejamento de projetos e sprints.</p>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">━ Timeline View — Q1/Q2 2026</span>
+    </div>
+    <div class="n-timeline">
+      <div class="n-tl-header">
+        <div></div>
+        <div class="n-tl-months">
+          <div class="n-tl-month">Jan</div>
+          <div class="n-tl-month">Fev</div>
+          <div class="n-tl-month">Mar</div>
+          <div class="n-tl-month">Abr</div>
+          <div class="n-tl-month">Mai</div>
+          <div class="n-tl-month">Jun</div>
+        </div>
+      </div>
+      <div class="n-tl-row">
+        <div class="n-tl-name">Redesign Site</div>
+        <div class="n-tl-bar-area">
+          <div class="n-tl-bar" style="left:33%;width:18%;background:rgba(74,158,255,0.25);color:#4a9eff">Redesign</div>
+        </div>
+      </div>
+      <div class="n-tl-row">
+        <div class="n-tl-name">App Mobile v2</div>
+        <div class="n-tl-bar-area">
+          <div class="n-tl-bar" style="left:15%;width:42%;background:rgba(167,139,250,0.25);color:#a78bfa">App Mobile</div>
+        </div>
+      </div>
+      <div class="n-tl-row">
+        <div class="n-tl-name">Dashboard BI</div>
+        <div class="n-tl-bar-area">
+          <div class="n-tl-bar" style="left:0%;width:25%;background:rgba(78,203,113,0.25);color:#4ecb71">Dashboard</div>
+        </div>
+      </div>
+      <div class="n-tl-row">
+        <div class="n-tl-name">API Stripe</div>
+        <div class="n-tl-bar-area">
+          <div class="n-tl-bar" style="left:55%;width:30%;background:rgba(251,146,60,0.25);color:#fb923c">Stripe API</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIST -->
+  <h3>≡ List — Lista</h3>
+  <p>View minimalista. Mostra apenas o nome do item e poucas propriedades selecionadas. Ideal quando você precisa de densidade, não de detalhes.</p>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">≡ List View</span>
+    </div>
+    <div class="n-list">
+      <div class="n-list-row">
+        <span class="n-list-icon">📄</span>
+        <span class="n-list-title">Redesign do Site</span>
+        <span class="n-tag tag-blue n-list-prop">Em andamento</span>
+        <span class="n-list-prop" style="font-size:0.68rem;color:var(--notion-text2)">28 Mar</span>
+      </div>
+      <div class="n-list-row">
+        <span class="n-list-icon">📄</span>
+        <span class="n-list-title">App Mobile v2</span>
+        <span class="n-tag tag-yellow n-list-prop">Em revisão</span>
+        <span class="n-list-prop" style="font-size:0.68rem;color:var(--notion-text2)">15 Abr</span>
+      </div>
+      <div class="n-list-row">
+        <span class="n-list-icon">📄</span>
+        <span class="n-list-title">Relatório Q1</span>
+        <span class="n-tag tag-green n-list-prop">Concluído</span>
+        <span class="n-list-prop" style="font-size:0.68rem;color:var(--notion-text2)">01 Mar</span>
+      </div>
+      <div class="n-list-row">
+        <span class="n-list-icon">📄</span>
+        <span class="n-list-title">Integração Stripe</span>
+        <span class="n-tag tag-purple n-list-prop">Backlog</span>
+        <span class="n-list-prop" style="font-size:0.68rem;color:var(--notion-text2)">—</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout green">
+    <span class="callout-icon">✅</span>
+    <strong>Regra prática:</strong> cada view pode ter filtros e ordenações <em>independentes</em>. 
+    Você pode ter uma view "Meu trabalho hoje" (filtro: responsável = eu + prazo = hoje) 
+    e uma view "Backlog geral" no mesmo database, sem criar nenhum dado novo.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ 04 FILTROS ══ -->
+<section class="section" id="filters">
+  <div class="section-label">04 — Filtros</div>
+  <h2 class="section-title">Filtros e Lógica de Busca</h2>
+  <p class="section-intro">
+    Filtros restringem quais itens aparecem em uma view. Podem ser simples (uma regra) 
+    ou compostos (múltiplas regras com AND/OR). Existem também filtros dinâmicos que se 
+    adaptam ao usuário atual ou à data de hoje.
+  </p>
+
+  <h3>Interface do filtro — visão real</h3>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">Construtor de Filtros</span>
+    </div>
+    <div class="n-filter-builder">
+      <div class="n-fb-header">Filtros desta view</div>
+
+      <div class="n-fb-rule">
+        <span style="color:var(--notion-text2);font-size:0.65rem;width:30px">Onde</span>
+        <select class="n-fb-select"><option>Status</option></select>
+        <select class="n-fb-select"><option>é</option></select>
+        <span class="n-tag tag-blue">Em andamento</span>
+        <span style="color:var(--red);margin-left:auto;cursor:pointer;font-size:0.9rem">×</span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:0.5rem;padding:0.3rem 1rem;border-bottom:1px solid var(--notion-border)">
+        <span class="n-fb-connector">E</span>
+        <span style="font-size:0.65rem;color:var(--notion-text2)">↕ trocar por OU</span>
+      </div>
+
+      <div class="n-fb-rule">
+        <span style="color:var(--notion-text2);font-size:0.65rem;width:30px">E</span>
+        <select class="n-fb-select"><option>Responsável</option></select>
+        <select class="n-fb-select"><option>contém</option></select>
+        <span class="n-tag tag-purple" style="background:rgba(167,139,250,0.15);color:#a78bfa">Eu</span>
+        <span style="color:var(--red);margin-left:auto;cursor:pointer;font-size:0.9rem">×</span>
+      </div>
+
+      <div style="display:flex;align-items:center;gap:0.5rem;padding:0.3rem 1rem;border-bottom:1px solid var(--notion-border)">
+        <span class="n-fb-connector">E</span>
+      </div>
+
+      <div class="n-fb-rule">
+        <span style="color:var(--notion-text2);font-size:0.65rem;width:30px">E</span>
+        <select class="n-fb-select"><option>Prazo</option></select>
+        <select class="n-fb-select"><option>antes de</option></select>
+        <select class="n-fb-select"><option>7 dias a partir de hoje</option></select>
+        <span style="color:var(--red);margin-left:auto;cursor:pointer;font-size:0.9rem">×</span>
+      </div>
+
+      <div class="n-fb-add">+ Adicionar regra de filtro</div>
+    </div>
+  </div>
+
+  <h3>Resultado do filtro acima — view filtrada</h3>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">⊞ Minhas tarefas urgentes</span>
+    </div>
+    <div class="n-filter-bar">
+      <span class="n-filter-label">Filtros ativos:</span>
+      <span class="n-filter-chip">Status = Em andamento</span>
+      <span class="n-filter-chip">Responsável = Eu</span>
+      <span class="n-filter-chip">Prazo &lt; 7 dias</span>
+    </div>
+    <div class="mockup-body" style="padding:0">
+      <table class="n-table">
+        <thead>
+          <tr><th>📄 Tarefa</th><th>🏷 Status</th><th>👤 Responsável</th><th>📅 Prazo</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Desenvolver API</td><td><span class="n-tag tag-blue">Em andamento</span></td><td>Eu</td><td>29 Mar 2026</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Operadores de filtro por tipo de propriedade</h3>
+
+  <table class="summary-table">
+    <thead><tr><th>Tipo</th><th>Operadores disponíveis</th></tr></thead>
+    <tbody>
+      <tr><td>Text / URL / Email</td><td>contém, não contém, é, não é, começa com, termina com, está vazio, não está vazio</td></tr>
+      <tr><td>Number</td><td>= , ≠ , &gt; , ≥ , &lt; , ≤ , está vazio, não está vazio</td></tr>
+      <tr><td>Select / Status</td><td>é, não é, está vazio, não está vazio</td></tr>
+      <tr><td>Multi-select</td><td>contém, não contém, está vazio, não está vazio</td></tr>
+      <tr><td>Checkbox</td><td>é marcado, é desmarcado</td></tr>
+      <tr><td>Date</td><td>é, antes de, depois de, na ou antes de, na ou depois de, entre, está vazio, não está vazio — e versões <em>relativas</em>: hoje, ontem, próx. 7 dias, mês passado, etc.</td></tr>
+      <tr><td>Person</td><td>contém, não contém, está vazio — inclui opção dinâmica <strong>"Eu"</strong></td></tr>
+      <tr><td>Relation</td><td>contém, não contém, está vazio, não está vazio</td></tr>
+      <tr><td>Rollup</td><td>igual ao tipo retornado (número, data, etc.)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Filtros dinâmicos — o recurso mais subestimado</h3>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <span class="info-card-icon">👤</span>
+      <div class="info-card-title">Filtro "Eu"</div>
+      <div class="info-card-desc">Em propriedades do tipo <code>Person</code>, você pode filtrar por <strong>"Eu"</strong> — o Notion resolve isso para o usuário atual. Cada membro vê apenas seus itens.</div>
+    </div>
+    <div class="info-card">
+      <span class="info-card-icon">📅</span>
+      <div class="info-card-title">Datas relativas</div>
+      <div class="info-card-desc">Filtros como "prazo = próximos 7 dias" são sempre calculados a partir da data atual. A view se atualiza sozinha todo dia.</div>
+    </div>
+    <div class="info-card">
+      <span class="info-card-icon">🔗</span>
+      <div class="info-card-title">Filtro por Relation</div>
+      <div class="info-card-desc">Filtre entradas que possuem (ou não possuem) uma relação com determinado item de outro database.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="callout-icon">⚠️</span>
+    <strong>Limitação real:</strong> filtros no Notion são por view, não por database. Se você deletar uma view, perdeu os filtros configurados nela. E filtros com lógica <em>mista</em> (AND dentro de OR) só são possíveis criando grupos de filtro — recurso adicionado em 2023.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ 05 RELAÇÕES ══ -->
+<section class="section" id="relations">
+  <div class="section-label">05 — Relações</div>
+  <h2 class="section-title">Relações entre Bancos de Dados</h2>
+  <p class="section-intro">
+    A propriedade <code>Relation</code> conecta dois databases — como uma chave estrangeira em SQL. 
+    É o que transforma o Notion de "tabela com texto" para um banco relacional de verdade.
+  </p>
+
+  <h3>Como funciona visualmente</h3>
+
+  <div class="rollup-diagram">
+    <div class="rollup-db">
+      <div class="rollup-db-header">📋 Projetos</div>
+      <table class="n-table">
+        <thead><tr><th>Nome</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Redesign Site</td><td><span class="n-tag tag-blue">Ativo</span></td></tr>
+          <tr><td>App Mobile</td><td><span class="n-tag tag-yellow">Revisão</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="rollup-connector">
+      <div style="font-size:0.6rem;color:var(--text3)">Relation</div>
+      <div class="rollup-arrow">⟷</div>
+      <div style="font-size:0.6rem;color:var(--text3)">bi-dir.</div>
+    </div>
+    <div class="rollup-db">
+      <div class="rollup-db-header">✅ Tarefas</div>
+      <table class="n-table">
+        <thead><tr><th>Tarefa</th><th>Projeto</th></tr></thead>
+        <tbody>
+          <tr><td>Wireframes</td><td><span style="color:#4a9eff;font-size:0.72rem">Redesign Site</span></td></tr>
+          <tr><td>Testes API</td><td><span style="color:#4a9eff;font-size:0.72rem">App Mobile</span></td></tr>
+          <tr><td>Deploy</td><td><span style="color:#4a9eff;font-size:0.72rem">Redesign Site</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Tipos de relação</h3>
+
+  <table class="summary-table">
+    <thead><tr><th>Tipo</th><th>Descrição</th><th>Quando usar</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>Unidirecional</td>
+        <td>Só o database A vê a relação. B não tem coluna automática.</td>
+        <td>Quando B é um database auxiliar e você não quer poluir ele com referências.</td>
+      </tr>
+      <tr>
+        <td>Bidirecional</td>
+        <td>Ambos os databases exibem a coluna de relação. Editar um lado reflete no outro.</td>
+        <td>Quando você precisa navegar nos dois sentidos: do Projeto ver as Tarefas, e da Tarefa ver o Projeto.</td>
+      </tr>
+      <tr>
+        <td>Self-relation</td>
+        <td>Um database se relaciona consigo mesmo.</td>
+        <td>Hierarquias: Tarefa pai → subtarefas. Funciona com a propriedade nativa "Sub-items".</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout blue">
+    <span class="callout-icon">ℹ️</span>
+    <strong>Sub-items vs Relation manual:</strong> desde 2023 o Notion tem sub-items nativos (hierarquia dentro do mesmo database). Para hierarquias simples, isso é mais fácil que criar uma self-relation manualmente.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ 06 ROLLUPS ══ -->
+<section class="section" id="rollups">
+  <div class="section-label">06 — Rollups</div>
+  <h2 class="section-title">Rollups — Agregações entre Databases</h2>
+  <p class="section-intro">
+    Rollup é uma propriedade que <em>atravessa uma Relation</em> e agrega valores do database relacionado.
+    Sem Rollup, você conecta projetos a tarefas, mas não sabe quantas tarefas tem cada projeto. 
+    Com Rollup, você sabe — e pode calcular soma, média, contagem, e muito mais.
+  </p>
+
+  <div class="callout">
+    <span class="callout-icon">🧩</span>
+    <strong>Pré-requisito:</strong> para criar um Rollup você precisa de uma Relation já configurada. 
+    Rollup sempre depende de uma Relation existente — ele pergunta: 
+    "de qual relação? qual propriedade? qual cálculo?"
+  </div>
+
+  <h3>As 3 perguntas que um Rollup responde</h3>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">Configuração de Rollup — Projetos → Tarefas</span>
+    </div>
+    <div class="mockup-body">
+      <div class="n-filter-builder" style="max-width:400px">
+        <div class="n-fb-header">📊 Configurar Rollup</div>
+        <div class="n-fb-rule" style="flex-direction:column;align-items:flex-start;gap:0.75rem">
+          <div>
+            <div style="font-size:0.65rem;color:var(--notion-text2);margin-bottom:0.3rem">1. Qual relação usar?</div>
+            <select class="n-fb-select"><option>↔ Tarefas (Relation)</option></select>
+          </div>
+          <div>
+            <div style="font-size:0.65rem;color:var(--notion-text2);margin-bottom:0.3rem">2. Qual propriedade de Tarefas?</div>
+            <select class="n-fb-select"><option># Horas gastas</option></select>
+          </div>
+          <div>
+            <div style="font-size:0.65rem;color:var(--notion-text2);margin-bottom:0.3rem">3. Qual cálculo?</div>
+            <select class="n-fb-select"><option>Soma</option></select>
+          </div>
+          <div style="background:rgba(78,203,113,0.1);border:1px solid rgba(78,203,113,0.3);border-radius:5px;padding:0.5rem 0.75rem;width:100%">
+            <div style="font-size:0.65rem;color:var(--notion-text2);margin-bottom:0.2rem">Resultado:</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:0.9rem;color:#4ecb71">27 horas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Resultado no database de Projetos</h3>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">📋 Projetos — com Rollups configurados</span>
+    </div>
+    <div class="mockup-body" style="padding:0">
+      <table class="n-table">
+        <thead>
+          <tr>
+            <th>📄 Projeto</th>
+            <th>↔ Tarefas</th>
+            <th>📊 Total Horas</th>
+            <th>📊 Tarefas Concluídas</th>
+            <th>📊 % Progresso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Redesign Site</td>
+            <td style="color:#4a9eff;font-size:0.72rem">3 páginas</td>
+            <td>27 h</td>
+            <td>1 de 3</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:0.5rem">
+                <div style="flex:1;height:6px;background:var(--notion-border);border-radius:3px">
+                  <div style="width:33%;height:100%;background:#4a9eff;border-radius:3px"></div>
+                </div>
+                <span style="font-size:0.68rem">33%</span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>App Mobile</td>
+            <td style="color:#4a9eff;font-size:0.72rem">5 páginas</td>
+            <td>89 h</td>
+            <td>2 de 5</td>
+            <td>
+              <div style="display:flex;align-items:center;gap:0.5rem">
+                <div style="flex:1;height:6px;background:var(--notion-border);border-radius:3px">
+                  <div style="width:40%;height:100%;background:#a78bfa;border-radius:3px"></div>
+                </div>
+                <span style="font-size:0.68rem">40%</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <h3>Todos os cálculos disponíveis no Rollup</h3>
+
+  <table class="summary-table">
+    <thead><tr><th>Cálculo</th><th>Funciona com</th><th>Retorna</th></tr></thead>
+    <tbody>
+      <tr><td>Count all</td><td>Qualquer</td><td>Número total de itens relacionados</td></tr>
+      <tr><td>Count values</td><td>Qualquer</td><td>Itens com valor não-vazio na propriedade</td></tr>
+      <tr><td>Count unique values</td><td>Qualquer</td><td>Valores distintos</td></tr>
+      <tr><td>Count empty</td><td>Qualquer</td><td>Itens sem valor na propriedade</td></tr>
+      <tr><td>Count not empty</td><td>Qualquer</td><td>Itens com valor preenchido</td></tr>
+      <tr><td>Percent empty / not empty</td><td>Qualquer</td><td>Percentual (útil para progresso)</td></tr>
+      <tr><td>Sum</td><td>Number</td><td>Soma de todos os valores</td></tr>
+      <tr><td>Average</td><td>Number</td><td>Média aritmética</td></tr>
+      <tr><td>Median</td><td>Number</td><td>Mediana</td></tr>
+      <tr><td>Min / Max</td><td>Number, Date</td><td>Menor ou maior valor</td></tr>
+      <tr><td>Range</td><td>Number, Date</td><td>Diferença entre max e min</td></tr>
+      <tr><td>Earliest / Latest date</td><td>Date</td><td>Data mais cedo ou mais tarde</td></tr>
+      <tr><td>Date range</td><td>Date</td><td>Intervalo entre datas</td></tr>
+      <tr><td>Checked / Unchecked</td><td>Checkbox</td><td>Contagem de marcados/desmarcados</td></tr>
+      <tr><td>Percent checked</td><td>Checkbox</td><td>% de itens marcados — ideal para progresso</td></tr>
+      <tr><td>Show original</td><td>Qualquer</td><td>Mostra os valores brutos (lista)</td></tr>
+      <tr><td>Show unique</td><td>Qualquer</td><td>Valores únicos brutos (lista deduplicada)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout green">
+    <span class="callout-icon">💡</span>
+    <strong>Rollup de Rollup:</strong> é possível criar um Rollup que agrega o resultado de outro Rollup — útil para hierarquias de 3 níveis (ex: Portfolio → Projetos → Tarefas). Mas cuidado: a performance pode degradar com muitos itens e camadas.
+  </div>
+
+  <div class="callout">
+    <span class="callout-icon">⚠️</span>
+    <strong>Limitação real:</strong> Rollups não reagem a filtros da view em tempo real. Eles agregam <em>todos</em> os itens relacionados, independente do que está visível na view. Para cálculos condicionais, você precisa combinar Rollup + Fórmula.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════ 07 FÓRMULAS ══ -->
+<section class="section" id="formulas">
+  <div class="section-label">07 — Fórmulas</div>
+  <h2 class="section-title">Fórmulas — lógica dentro do database</h2>
+  <p class="section-intro">
+    A propriedade <code>Formula</code> permite cálculos dinâmicos baseados em outras propriedades da mesma entrada. 
+    Com a <strong>Fórmula 2.0</strong> (lançada em 2023), o poder aumentou significativamente — variáveis, 
+    condicionais complexas, e até acesso a itens de Relation.
+  </p>
+
+  <h3>Exemplos práticos</h3>
+
+  <div class="formula-block">
+    <span class="f-comment">// Calcular dias restantes até o prazo</span><br>
+    <span class="f-func">dateBetween</span>(<span class="f-prop">prop("Prazo")</span>, <span class="f-func">now</span>(), <span class="f-string">"days"</span>)
+  </div>
+
+  <div class="formula-block">
+    <span class="f-comment">// Status legível com emoji</span><br>
+    <span class="f-keyword">if</span>(<span class="f-prop">prop("Concluído")</span>, <span class="f-string">"✅ Feito"</span>,<br>
+    &nbsp;&nbsp;<span class="f-keyword">if</span>(<span class="f-prop">prop("Status")</span> == <span class="f-string">"Em andamento"</span>, <span class="f-string">"🔄 Em progresso"</span>,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="f-string">"⏳ Pendente"</span>))
+  </div>
+
+  <div class="formula-block">
+    <span class="f-comment">// Progresso % combinando Rollup e Number</span><br>
+    <span class="f-func">round</span>(<span class="f-prop">prop("Tarefas Concluídas")</span> / <span class="f-prop">prop("Total Tarefas")</span> * 100) + <span class="f-string">"%"</span>
+  </div>
+
+  <div class="formula-block">
+    <span class="f-comment">// Fórmula 2.0 — usando variáveis (let)</span><br>
+    <span class="f-keyword">let</span>(diasRestantes, <span class="f-func">dateBetween</span>(<span class="f-prop">prop("Prazo")</span>, <span class="f-func">now</span>(), <span class="f-string">"days"</span>),<br>
+    &nbsp;&nbsp;<span class="f-keyword">if</span>(diasRestantes &lt; 0, <span class="f-string">"🔴 Atrasado"</span>,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;<span class="f-keyword">if</span>(diasRestantes &lt;= 3, <span class="f-string">"🟠 Urgente"</span>,<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="f-string">"🟢 No prazo"</span>)))
+  </div>
+
+  <table class="summary-table">
+    <thead><tr><th>Categoria</th><th>Funções principais</th></tr></thead>
+    <tbody>
+      <tr><td>Texto</td><td><code>concat</code>, <code>slice</code>, <code>length</code>, <code>contains</code>, <code>replace</code>, <code>upper</code>, <code>lower</code>, <code>trim</code></td></tr>
+      <tr><td>Número</td><td><code>round</code>, <code>floor</code>, <code>ceil</code>, <code>abs</code>, <code>max</code>, <code>min</code>, <code>mod</code>, <code>sqrt</code></td></tr>
+      <tr><td>Data</td><td><code>now</code>, <code>dateAdd</code>, <code>dateBetween</code>, <code>formatDate</code>, <code>day</code>, <code>month</code>, <code>year</code></td></tr>
+      <tr><td>Lógica</td><td><code>if</code>, <code>and</code>, <code>or</code>, <code>not</code>, <code>empty</code>, <code>ifs</code> (multi-caso)</td></tr>
+      <tr><td>Fórmula 2.0</td><td><code>let</code>, <code>lets</code>, <code>map</code>, <code>filter</code>, <code>find</code>, <code>sort</code>, <code>at</code>, <code>first</code>, <code>last</code></td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- SORTS -->
+<section class="section" id="sorts">
+  <div class="section-label">08 — Ordenação</div>
+  <h2 class="section-title">Ordenação (Sort)</h2>
+  <p class="section-intro">
+    Ordenações definem a sequência dos itens na view. Assim como filtros, cada view tem suas próprias ordenações independentes. Você pode empilhar múltiplas ordenações — a primeira tem prioridade.
+  </p>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">Configuração de Ordenação</span>
+    </div>
+    <div class="n-filter-builder">
+      <div class="n-fb-header">Ordenações desta view</div>
+      <div class="n-fb-rule">
+        <span style="color:var(--notion-text2);font-size:0.65rem;width:60px">Ordenar por</span>
+        <select class="n-fb-select"><option>⭐ Prioridade</option></select>
+        <select class="n-fb-select"><option>Crescente (A→Z)</option></select>
+        <span style="color:var(--red);margin-left:auto;cursor:pointer">×</span>
+      </div>
+      <div class="n-fb-rule">
+        <span style="color:var(--notion-text2);font-size:0.65rem;width:60px">Depois por</span>
+        <select class="n-fb-select"><option>📅 Prazo</option></select>
+        <select class="n-fb-select"><option>Crescente (mais próximo)</option></select>
+        <span style="color:var(--red);margin-left:auto;cursor:pointer">×</span>
+      </div>
+      <div class="n-fb-add">+ Adicionar ordenação</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <span class="callout-icon">⚠️</span>
+    <strong>Nota sobre Select/Multi-select:</strong> a ordenação de propriedades <code>Select</code> segue a ordem das opções definida no editor de propriedades — não ordem alfabética por padrão. Você controla isso manualmente reordenando as opções.
+  </div>
+
+  <h3>Agrupamento (Group by)</h3>
+  <p>Além de ordenar, você pode <strong>agrupar</strong> itens por qualquer propriedade — separando visualmente por Status, Responsável, data, etc. Funciona em todas as views exceto Calendar e Timeline.</p>
+
+  <div class="mockup-wrap">
+    <div class="mockup-title-bar">
+      <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+      <span style="margin-left:0.5rem">⊞ Table — agrupada por Responsável</span>
+    </div>
+    <div class="mockup-body" style="padding:0">
+      <div style="padding:0.6rem 1rem;background:var(--notion-surface);border-bottom:1px solid var(--notion-border);font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--notion-text2);display:flex;align-items:center;gap:0.5rem">
+        <span style="color:#4ecb71">▶</span> Ana Lima <span class="n-board-count">2</span>
+      </div>
+      <table class="n-table">
+        <tbody>
+          <tr><td>Redesign do Site</td><td><span class="n-tag tag-blue">Em andamento</span></td><td>28 Mar</td></tr>
+          <tr><td>Criar wireframes</td><td><span class="n-tag tag-green">Concluído</span></td><td>10 Mar</td></tr>
+        </tbody>
+      </table>
+      <div style="padding:0.6rem 1rem;background:var(--notion-surface);border-bottom:1px solid var(--notion-border);border-top:1px solid var(--notion-border);font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--notion-text2);display:flex;align-items:center;gap:0.5rem">
+        <span style="color:#4a9eff">▶</span> Carlos Mota <span class="n-board-count">1</span>
+      </div>
+      <table class="n-table">
+        <tbody>
+          <tr><td>App Mobile v2</td><td><span class="n-tag tag-yellow">Em revisão</span></td><td>15 Abr</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<section style="max-width:900px;margin:0 auto;padding:4rem 2rem 5rem;text-align:center">
+  <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;color:var(--text);margin-bottom:0.75rem">
+    Este é o Capítulo I.
+  </div>
+  <p style="color:var(--text2);max-width:500px;margin:0 auto 2rem;font-size:0.9rem">
+    Cobrimos a estrutura completa de bancos de dados: propriedades, views, filtros, ordenação, relações, rollups e fórmulas.
+    Próximos capítulos cobrem automações, templates, API e casos de uso avançados.
+  </p>
+  <div style="display:inline-flex;align-items:center;gap:0.5rem;font-family:'IBM Plex Mono',monospace;font-size:0.72rem;color:var(--accent)">
+    <span>⬆</span> <a href="#top" style="color:var(--accent);text-decoration:none">Voltar ao início</a>
+  </div>
+</section>
+
+<a class="back-top" href="#top" title="Voltar ao topo">↑</a>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const doc = document.documentElement;
+    const pct = (doc.scrollTop / (doc.scrollHeight - doc.clientHeight)) * 100;
+    document.getElementById('progress').style.width = pct + '%';
+  });
+
+  // Active nav
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.nav-link[href="#${entry.target.id}"]`);
+        if (active) {
+          active.classList.add('active');
+          active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

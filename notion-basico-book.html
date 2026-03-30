@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notion Básico — O Guia Visual</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --surface2: #f0ede8;
+    --border: #e2ddd8;
+    --text: #1a1814;
+    --text2: #5a5650;
+    --text3: #9a9590;
+    --accent: #c44a2b;
+    --accent2: #2b6cb0;
+    --accent3: #276749;
+    --notion-gray: #787774;
+    --notion-brown: #9F6B53;
+    --notion-orange: #D9730D;
+    --notion-yellow: #CB912F;
+    --notion-green: #448361;
+    --notion-blue: #337EA9;
+    --notion-purple: #9065B0;
+    --notion-pink: #C14C8A;
+    --notion-red: #D44C47;
+    --sidebar-w: 260px;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-header {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .sidebar-logo {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .sidebar-title {
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .sidebar-subtitle {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 4px;
+  }
+
+  .sidebar-nav { padding: 16px 0; flex: 1; }
+
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: 12px 24px 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 24px;
+    font-size: 13.5px;
+    font-weight: 400;
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    border-left: 3px solid transparent;
+    text-decoration: none;
+  }
+
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+
+  .nav-item.active {
+    background: var(--surface2);
+    color: var(--accent);
+    border-left-color: var(--accent);
+    font-weight: 500;
+  }
+
+  .nav-icon { font-size: 15px; width: 20px; text-align: center; }
+
+  .sidebar-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    color: var(--text3);
+  }
+
+  /* ── MAIN ── */
+  .main {
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--text);
+    color: white;
+    padding: 80px 72px 72px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 320px; height: 320px;
+    border-radius: 50%;
+    background: rgba(196,74,43,0.15);
+    pointer-events: none;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: 20%;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: rgba(43,108,176,0.08);
+    pointer-events: none;
+  }
+
+  .hero-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: 52px;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 20px;
+    max-width: 560px;
+  }
+
+  .hero h1 em { color: var(--accent); font-style: italic; }
+
+  .hero p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.65);
+    max-width: 480px;
+    line-height: 1.7;
+  }
+
+  .hero-chapters {
+    display: flex;
+    gap: 24px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+  }
+
+  .hero-chip {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .hero-chip:hover {
+    background: rgba(255,255,255,0.15);
+    color: white;
+  }
+
+  /* ── CHAPTER SECTION ── */
+  .chapter {
+    padding: 64px 72px;
+    border-bottom: 1px solid var(--border);
+    scroll-margin-top: 0;
+  }
+
+  .chapter:nth-child(even) { background: var(--surface); }
+
+  .chapter-number {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .chapter-number::after {
+    content: '';
+    flex: 1;
+    max-width: 48px;
+    height: 1px;
+    background: var(--accent);
+    opacity: 0.4;
+  }
+
+  .chapter h2 {
+    font-family: var(--font-display);
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 14px;
+    max-width: 600px;
+  }
+
+  .chapter-intro {
+    font-size: 15.5px;
+    color: var(--text2);
+    max-width: 640px;
+    margin-bottom: 40px;
+    line-height: 1.75;
+  }
+
+  /* ── TOPIC ── */
+  .topic { margin-bottom: 48px; }
+
+  .topic-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .topic-desc {
+    font-size: 14.5px;
+    color: var(--text2);
+    max-width: 600px;
+    margin-bottom: 20px;
+    line-height: 1.72;
+  }
+
+  /* ── NOTION MOCK ── */
+  .notion-mock {
+    background: #ffffff;
+    border: 1px solid #e2ddd8;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03);
+    margin-bottom: 12px;
+  }
+
+  .notion-mock-bar {
+    background: #fbfaf9;
+    border-bottom: 1px solid #efefed;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .mock-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  .mock-dot-r { background: #FF5F57; }
+  .mock-dot-y { background: #FFBD2E; }
+  .mock-dot-g { background: #28C840; }
+
+  .mock-page-title-bar {
+    font-size: 11px;
+    color: #9a9590;
+    margin-left: 8px;
+    font-family: var(--font-mono);
+  }
+
+  .notion-mock-body {
+    padding: 28px 32px;
+  }
+
+  .mock-page-icon { font-size: 36px; margin-bottom: 8px; display: block; }
+
+  .mock-page-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a1814;
+    margin-bottom: 20px;
+    font-family: var(--font-display);
+  }
+
+  /* ── MOCK TEXT FORMATTING ── */
+  .mock-line {
+    font-size: 14px;
+    color: #37352f;
+    margin-bottom: 6px;
+    line-height: 1.6;
+    font-family: var(--font-body);
+  }
+
+  .mock-bold { font-weight: 700; }
+  .mock-italic { font-style: italic; }
+  .mock-underline { text-decoration: underline; }
+  .mock-strike { text-decoration: line-through; color: #9a9590; }
+  .mock-code {
+    font-family: var(--font-mono);
+    background: rgba(135,131,120,0.15);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 85%;
+    color: #eb5757;
+  }
+
+  .mock-kbd-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .mock-kbd {
+    background: #f0ede8;
+    border: 1px solid #d4cfc9;
+    border-bottom: 2px solid #d4cfc9;
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: #5a5650;
+  }
+
+  /* COLOR SAMPLES */
+  .color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .color-card {
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .color-swatch {
+    width: 16px; height: 16px;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  /* ── QUOTE MOCK ── */
+  .mock-quote {
+    border-left: 3px solid #37352f;
+    padding: 4px 0 4px 14px;
+    margin: 10px 0;
+    font-size: 14px;
+    color: #37352f;
+  }
+
+  /* ── CALLOUT MOCK ── */
+  .mock-callout {
+    background: rgba(255,212,0,0.14);
+    border-radius: 6px;
+    padding: 12px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin: 10px 0;
+    font-size: 14px;
+    color: #37352f;
+  }
+
+  .mock-callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── COLUMNS MOCK ── */
+  .mock-columns {
+    display: flex;
+    gap: 16px;
+    position: relative;
+  }
+
+  .mock-column {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .mock-col-divider {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: #e2ddd8;
+    transform: translateX(-50%);
+  }
+
+  /* ── PILLS ── */
+  .mock-pill {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    margin: 2px 3px;
+  }
+
+  /* ── DIVIDER ── */
+  .mock-divider {
+    border: none;
+    border-top: 1px solid #e2ddd8;
+    margin: 14px 0;
+  }
+
+  /* ── TOGGLE MOCK ── */
+  .mock-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    padding: 3px 0;
+    color: #37352f;
+  }
+
+  .mock-toggle-arrow { font-size: 12px; color: #9a9590; transition: transform 0.2s; }
+  .mock-toggle.open .mock-toggle-arrow { transform: rotate(90deg); }
+  .mock-toggle-content {
+    padding: 6px 0 6px 20px;
+    font-size: 13px;
+    color: #5a5650;
+    display: none;
+  }
+  .mock-toggle.open + .mock-toggle-content { display: block; }
+
+  /* ── CODE BLOCK MOCK ── */
+  .mock-code-block {
+    background: #f7f6f3;
+    border-radius: 6px;
+    padding: 14px 16px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: #37352f;
+    margin: 10px 0;
+    border: 1px solid #e8e5e0;
+    position: relative;
+  }
+
+  .mock-code-lang {
+    position: absolute;
+    top: 10px; right: 12px;
+    font-size: 11px;
+    color: #9a9590;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ── CAPTION / TIP ── */
+  .mock-caption {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 6px;
+    padding-left: 4px;
+    font-style: italic;
+  }
+
+  /* ── SLASH COMMAND MOCK ── */
+  .mock-slash-menu {
+    background: white;
+    border: 1px solid #e2ddd8;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    width: 240px;
+    overflow: hidden;
+    margin: 12px 0;
+  }
+
+  .mock-slash-search {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #37352f;
+    border-bottom: 1px solid #efefed;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #fbfaf9;
+  }
+
+  .mock-slash-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #37352f;
+    transition: background 0.1s;
+  }
+
+  .mock-slash-item:hover,
+  .mock-slash-item.selected {
+    background: #f0ede8;
+  }
+
+  .mock-slash-item-icon {
+    width: 28px; height: 28px;
+    background: #f0ede8;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  .mock-slash-item-info { flex: 1; }
+  .mock-slash-item-name { font-weight: 500; font-size: 13px; }
+  .mock-slash-item-desc { font-size: 11px; color: #9a9590; }
+
+  /* ── TOOLBAR MOCK ── */
+  .mock-toolbar {
+    background: #37352f;
+    border-radius: 6px;
+    padding: 6px 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin: 6px 0;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.2);
+  }
+
+  .mock-tool-btn {
+    padding: 5px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 28px;
+    transition: background 0.15s;
+  }
+
+  .mock-tool-btn:hover,
+  .mock-tool-btn.active { background: rgba(255,255,255,0.15); }
+
+  .mock-tool-sep {
+    width: 1px;
+    height: 18px;
+    background: rgba(255,255,255,0.15);
+    margin: 0 2px;
+  }
+
+  /* ── TABLE OF CONTENTS (inline) ── */
+  .toc-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-bottom: 36px;
+    max-width: 520px;
+  }
+
+  .toc-box h3 {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: var(--text3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+
+  .toc-list { list-style: none; }
+
+  .toc-list li {
+    margin-bottom: 6px;
+  }
+
+  .toc-list a {
+    font-size: 14px;
+    color: var(--text2);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.15s;
+  }
+
+  .toc-list a:hover { color: var(--accent); }
+
+  .toc-num {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--accent);
+    width: 20px;
+  }
+
+  /* ── TIP BOX ── */
+  .tip-box {
+    background: #f0f7ff;
+    border-left: 3px solid var(--accent2);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 20px 0;
+    font-size: 14px;
+    color: var(--text2);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .tip-box-icon { font-size: 16px; margin-top: 2px; flex-shrink: 0; }
+
+  .warn-box {
+    background: #fff8e6;
+    border-left: 3px solid #cb912f;
+  }
+
+  /* ── SHORTCUT TABLE ── */
+  .shortcut-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 16px 0;
+  }
+
+  .shortcut-table th {
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text3);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+
+  .shortcut-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    vertical-align: middle;
+  }
+
+  .shortcut-table tr:last-child td { border-bottom: none; }
+  .shortcut-table tr:hover td { background: var(--surface2); }
+
+  kbd-wrap { display: flex; gap: 4px; }
+
+  .ks {
+    background: #f0ede8;
+    border: 1px solid #d4cfc9;
+    border-bottom: 2px solid #c4bdb6;
+    border-radius: 4px;
+    padding: 2px 7px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  /* ── COLOR BG SAMPLES ── */
+  .bg-gray    { background: rgba(120,119,116,.15); }
+  .bg-brown   { background: rgba(159,107,83,.15); }
+  .bg-orange  { background: rgba(217,115,13,.15); }
+  .bg-yellow  { background: rgba(203,145,47,.15); }
+  .bg-green   { background: rgba(68,131,97,.15); }
+  .bg-blue    { background: rgba(51,126,169,.15); }
+  .bg-purple  { background: rgba(144,101,176,.15); }
+  .bg-pink    { background: rgba(193,76,138,.15); }
+  .bg-red     { background: rgba(212,76,71,.15); }
+
+  .fg-gray    { color: var(--notion-gray); }
+  .fg-brown   { color: var(--notion-brown); }
+  .fg-orange  { color: var(--notion-orange); }
+  .fg-yellow  { color: var(--notion-yellow); }
+  .fg-green   { color: var(--notion-green); }
+  .fg-blue    { color: var(--notion-blue); }
+  .fg-purple  { color: var(--notion-purple); }
+  .fg-pink    { color: var(--notion-pink); }
+  .fg-red     { color: var(--notion-red); }
+
+  /* ── STEP ── */
+  .steps { counter-reset: step; margin: 16px 0; }
+
+  .step {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+
+  .step-num {
+    counter-increment: step;
+    width: 28px; height: 28px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .step-body { flex: 1; font-size: 14.5px; color: var(--text2); line-height: 1.65; }
+  .step-body strong { color: var(--text); }
+
+  /* ── FOOTER ── */
+  .book-footer {
+    padding: 48px 72px;
+    background: var(--text);
+    color: rgba(255,255,255,0.45);
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .book-footer span { color: rgba(255,255,255,0.7); font-weight: 500; }
+
+  /* ── SCROLL PROGRESS ── */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: var(--sidebar-w);
+    right: 0; height: 2px;
+    background: var(--accent);
+    transform-origin: left;
+    transform: scaleX(0);
+    z-index: 200;
+    transition: transform 0.1s;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .sidebar { transform: translateX(-100%); }
+    .main { margin-left: 0; }
+    .chapter { padding: 40px 28px; }
+    .hero { padding: 48px 28px; }
+    .hero h1 { font-size: 34px; }
+    .book-footer { flex-direction: column; gap: 8px; padding: 32px 28px; }
+    .progress-bar { left: 0; }
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .chapter { animation: fadeInUp 0.5s ease both; }
+
+  /* ── INLINE HIGHLIGHT USED INSIDE MOCK ── */
+  .hl { background: rgba(255,212,0,0.35); border-radius: 2px; padding: 0 2px; }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progress"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">Guia Visual</div>
+    <div class="sidebar-title">Notion Básico</div>
+    <div class="sidebar-subtitle">Formatação &amp; Estrutura</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Início</div>
+    <a class="nav-item active" href="#intro" onclick="setActive(this)">
+      <span class="nav-icon">📖</span> Introdução
+    </a>
+    <div class="nav-section-label">Formatação</div>
+    <a class="nav-item" href="#ch-texto" onclick="setActive(this)">
+      <span class="nav-icon">✍️</span> 1. Texto &amp; Estilos
+    </a>
+    <a class="nav-item" href="#ch-cores" onclick="setActive(this)">
+      <span class="nav-icon">🎨</span> 2. Cores &amp; Fundos
+    </a>
+    <div class="nav-section-label">Estrutura</div>
+    <a class="nav-item" href="#ch-colunas" onclick="setActive(this)">
+      <span class="nav-icon">⬛</span> 3. Colunas
+    </a>
+    <a class="nav-item" href="#ch-pilulas" onclick="setActive(this)">
+      <span class="nav-icon">🏷️</span> 4. Pílulas / Tags
+    </a>
+    <a class="nav-item" href="#ch-citacoes" onclick="setActive(this)">
+      <span class="nav-icon">💬</span> 5. Citações &amp; Callouts
+    </a>
+    <div class="nav-section-label">Extras</div>
+    <a class="nav-item" href="#ch-divisores" onclick="setActive(this)">
+      <span class="nav-icon">➖</span> 6. Divisores &amp; Toggles
+    </a>
+    <a class="nav-item" href="#ch-slash" onclick="setActive(this)">
+      <span class="nav-icon">⚡</span> 7. Comando /
+    </a>
+    <a class="nav-item" href="#ch-atalhos" onclick="setActive(this)">
+      <span class="nav-icon">⌨️</span> 8. Atalhos Essenciais
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    Notion Básico • Guia Visual<br>v1.0 — 2025
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- HERO -->
+  <section class="hero" id="intro">
+    <div class="hero-label">Guia Visual Completo</div>
+    <h1>Notion <em>Básico</em>:<br>Formatação &amp; Estrutura</h1>
+    <p>Do texto simples a layouts profissionais. Aprenda a formatar, colorir, estruturar e organizar suas páginas no Notion com exemplos visuais em cada passo.</p>
+    <div class="hero-chapters">
+      <span class="hero-chip" onclick="document.getElementById('ch-texto').scrollIntoView({behavior:'smooth'})">✍️ Texto &amp; Estilos</span>
+      <span class="hero-chip" onclick="document.getElementById('ch-cores').scrollIntoView({behavior:'smooth'})">🎨 Cores &amp; Fundos</span>
+      <span class="hero-chip" onclick="document.getElementById('ch-colunas').scrollIntoView({behavior:'smooth'})">⬛ Colunas</span>
+      <span class="hero-chip" onclick="document.getElementById('ch-pilulas').scrollIntoView({behavior:'smooth'})">🏷️ Pílulas / Tags</span>
+      <span class="hero-chip" onclick="document.getElementById('ch-citacoes').scrollIntoView({behavior:'smooth'})">💬 Citações</span>
+      <span class="hero-chip" onclick="document.getElementById('ch-slash').scrollIntoView({behavior:'smooth'})">⚡ Comando /</span>
+    </div>
+  </section>
+
+  <!-- ── CAPÍTULO 1: TEXTO ── -->
+  <section class="chapter" id="ch-texto">
+    <div class="chapter-number">Capítulo 01</div>
+    <h2>Texto &amp; Estilos de Formatação</h2>
+    <p class="chapter-intro">
+      O Notion usa o conceito de <strong>blocos</strong>: tudo na página é um bloco independente. Para formatar texto, você seleciona o trecho desejado e usa a barra de ferramentas flutuante que aparece — ou atalhos de teclado.
+    </p>
+
+    <!-- TOOLBAR MOCK -->
+    <div class="topic">
+      <div class="topic-title">A Barra de Formatação</div>
+      <p class="topic-desc">Selecione qualquer texto e esta barra aparece automaticamente. Ela contém os controles de estilo mais usados.</p>
+
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+          <span class="mock-page-title-bar">Minha Página</span>
+        </div>
+        <div class="notion-mock-body">
+          <span class="mock-page-icon">📝</span>
+          <div class="mock-page-title">Notas do Projeto</div>
+          <div class="mock-line" style="background:rgba(255,212,0,0.25); border-radius:3px; padding:2px 4px; display:inline-block; margin-bottom:12px;">
+            Este texto está selecionado
+          </div>
+          <br><br>
+          <div class="mock-toolbar">
+            <div class="mock-tool-btn active" title="Negrito"><strong>B</strong></div>
+            <div class="mock-tool-btn" title="Itálico"><em>I</em></div>
+            <div class="mock-tool-btn" title="Sublinhado" style="text-decoration:underline;">U</div>
+            <div class="mock-tool-btn" title="Tachado" style="text-decoration:line-through;">S</div>
+            <div class="mock-tool-sep"></div>
+            <div class="mock-tool-btn" style="font-family:var(--font-mono); font-size:11px;">&lt;/&gt;</div>
+            <div class="mock-tool-btn">🔗</div>
+            <div class="mock-tool-sep"></div>
+            <div class="mock-tool-btn" style="font-size:13px; color:#e07c2b; font-weight:700;">A</div>
+            <div class="mock-tool-btn" style="font-size:13px; background:rgba(255,255,255,0.2); border-radius:3px; font-weight:700;">A</div>
+            <div class="mock-tool-sep"></div>
+            <div class="mock-tool-btn">⋯</div>
+          </div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 1.1 — Barra de formatação flutuante do Notion (aparece ao selecionar texto)</p>
+    </div>
+
+    <!-- ESTILOS -->
+    <div class="topic">
+      <div class="topic-title">Estilos Disponíveis</div>
+      <p class="topic-desc">Cada estilo tem um atalho de teclado correspondente. Você pode combiná-los livremente — negrito+itálico, por exemplo.</p>
+
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+          <div class="mock-line"><span class="mock-bold">Texto em Negrito</span> <span class="mock-kbd-hint"><span class="mock-kbd">Ctrl</span><span class="mock-kbd">B</span></span></div>
+          <div class="mock-line"><span class="mock-italic">Texto em Itálico</span> <span class="mock-kbd-hint"><span class="mock-kbd">Ctrl</span><span class="mock-kbd">I</span></span></div>
+          <div class="mock-line"><span class="mock-underline">Texto Sublinhado</span> <span class="mock-kbd-hint"><span class="mock-kbd">Ctrl</span><span class="mock-kbd">U</span></span></div>
+          <div class="mock-line"><span class="mock-strike">Texto Tachado</span> <span class="mock-kbd-hint"><span class="mock-kbd">Ctrl</span><span class="mock-kbd">Shift</span><span class="mock-kbd">S</span></span></div>
+          <div class="mock-line">Código inline: <span class="mock-code">const x = 42</span> <span class="mock-kbd-hint"><span class="mock-kbd">Ctrl</span><span class="mock-kbd">E</span></span></div>
+          <div class="mock-line"><span class="mock-bold mock-italic">Negrito + Itálico combinado</span></div>
+          <div class="mock-line">Texto com <span class="hl">destaque amarelo</span> manual</div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 1.2 — Todos os estilos de texto do Notion com seus atalhos</p>
+    </div>
+
+    <!-- HEADINGS -->
+    <div class="topic">
+      <div class="topic-title">Cabeçalhos (H1, H2, H3)</div>
+      <p class="topic-desc">
+        O Notion oferece 3 níveis de cabeçalho. Use <strong>/h1</strong>, <strong>/h2</strong> ou <strong>/h3</strong> para inserir, ou converta com o menu lateral do bloco.
+      </p>
+
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+          <div style="font-size:28px; font-weight:700; color:#1a1814; margin-bottom:6px; font-family:var(--font-display);">Título Principal (H1)</div>
+          <div style="font-size:22px; font-weight:700; color:#1a1814; margin-bottom:6px; font-family:var(--font-display);">Subtítulo (H2)</div>
+          <div style="font-size:17px; font-weight:600; color:#1a1814; margin-bottom:10px; font-family:var(--font-display);">Seção (H3)</div>
+          <div class="mock-line">Parágrafo de texto normal, com tamanho padrão e peso regular para leitura contínua...</div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 1.3 — Hierarquia visual dos cabeçalhos</p>
+    </div>
+
+    <div class="tip-box">
+      <span class="tip-box-icon">💡</span>
+      <div><strong>Dica de produtividade:</strong> No início de uma linha vazia, digite <code style="font-family:var(--font-mono); font-size:12px; background:rgba(135,131,120,0.15); padding:1px 5px; border-radius:3px;">#</code> + espaço para criar H1, <code style="font-family:var(--font-mono); font-size:12px; background:rgba(135,131,120,0.15); padding:1px 5px; border-radius:3px;">##</code> para H2, e <code style="font-family:var(--font-mono); font-size:12px; background:rgba(135,131,120,0.15); padding:1px 5px; border-radius:3px;">###</code> para H3 — sintaxe Markdown funciona nativamente.</div>
+    </div>
+  </section>
+
+  <!-- ── CAPÍTULO 2: CORES ── -->
+  <section class="chapter" id="ch-cores">
+    <div class="chapter-number">Capítulo 02</div>
+    <h2>Cores de Texto &amp; Fundos</h2>
+    <p class="chapter-intro">
+      O Notion oferece 9 cores para o texto e 9 cores de fundo por bloco. Você aplica ambas pelo mesmo menu — que aparece na barra flutuante (botão <strong>A</strong> colorido) ou digitando <strong>/cor</strong>.
+    </p>
+
+    <!-- CORES DE TEXTO -->
+    <div class="topic">
+      <div class="topic-title">Cores de Texto</div>
+      <p class="topic-desc">Aplicadas à seleção atual. O Notion não permite cores personalizadas — apenas a paleta pré-definida abaixo.</p>
+
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+          <div class="mock-line fg-gray">■ Cinza — Tom neutro para texto secundário</div>
+          <div class="mock-line fg-brown">■ Marrom — Tom terroso e quente</div>
+          <div class="mock-line fg-orange">■ Laranja — Chamadas de atenção</div>
+          <div class="mock-line fg-yellow">■ Amarelo — Destaques moderados</div>
+          <div class="mock-line fg-green">■ Verde — Aprovado, concluído, positivo</div>
+          <div class="mock-line fg-blue">■ Azul — Links, referências, informação</div>
+          <div class="mock-line fg-purple">■ Roxo — Criativo, diferenciado</div>
+          <div class="mock-line fg-pink">■ Rosa — Destaque suave</div>
+          <div class="mock-line fg-red">■ Vermelho — Alerta, urgente, crítico</div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 2.1 — Paleta completa de cores de texto do Notion</p>
+    </div>
+
+    <!-- CORES DE FUNDO -->
+    <div class="topic">
+      <div class="topic-title">Cores de Fundo (Background)</div>
+      <p class="topic-desc">O fundo é aplicado ao bloco inteiro, não apenas à seleção. Combinado com cor de texto, permite criar hierarquias visuais claras.</p>
+
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+          <div class="mock-line bg-gray" style="padding:6px 10px; border-radius:4px; margin-bottom:5px;">Fundo Cinza — Background gray</div>
+          <div class="mock-line bg-brown" style="padding:6px 10px; border-radius:4px; margin-bottom:5px;">Fundo Marrom — Background brown</div>
+          <div class="mock-line bg-orange" style="padding:6px 10px; border-radius:4px; margin-bottom:5px;">Fundo Laranja — Background orange</div>
+          <div class="mock-line bg-yellow" style="padding:6px 10px; border-radius:4px; margin-bottom:5px;">Fundo Amarelo — Background yellow</div>
+          <div class="mock-line bg-green" style="padding:6px 10px; border-radius:4px; margin-bottom:5px;">Fundo Verde — Background green</div>
+          <div class="mock-line bg-blue" style="padding:6px 10px; border-radius:4px; margin-bottom:5px;">Fundo Azul — Background blue</div>
+          <div class="mock-line bg-purple" style="padding:6px 10px; border-radius:4px; margin-bottom:5px;">Fundo Roxo — Background purple</div>
+          <div class="mock-line bg-pink" style="padding:6px 10px; border-radius:4px; margin-bottom:5px;">Fundo Rosa — Background pink</div>
+          <div class="mock-line bg-red" style="padding:6px 10px; border-radius:4px; margin-bottom:5px;">Fundo Vermelho — Background red</div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 2.2 — Cores de fundo aplicadas a blocos de texto</p>
+    </div>
+
+    <!-- COMBINANDO COR + FUNDO -->
+    <div class="topic">
+      <div class="topic-title">Combinando Cor + Fundo</div>
+      <p class="topic-desc">Você pode aplicar cor de texto e cor de fundo simultaneamente. Use com moderação — excesso compromete a legibilidade.</p>
+
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+          <div class="mock-line fg-red bg-yellow" style="padding:6px 10px; border-radius:4px; margin-bottom:5px; font-weight:600;">🔴 Alerta crítico: prazo hoje!</div>
+          <div class="mock-line fg-green bg-green" style="padding:6px 10px; border-radius:4px; margin-bottom:5px; font-weight:500;">✅ Tarefa aprovada e concluída</div>
+          <div class="mock-line fg-blue bg-blue" style="padding:6px 10px; border-radius:4px; margin-bottom:5px;">ℹ️ Informação relevante para o time</div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 2.3 — Combinações práticas de cor texto + fundo</p>
+    </div>
+
+    <!-- COMO ACESSAR -->
+    <div class="topic">
+      <div class="topic-title">Como Aplicar uma Cor</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body">Selecione o texto ou posicione o cursor no bloco desejado</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body">Clique no ícone <strong>A colorido</strong> na barra flutuante — ou pressione <span class="ks">Ctrl</span> <span class="ks">Shift</span> <span class="ks">H</span> para amarelo rápido</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body">Escolha <strong>Cor</strong> (texto) ou <strong>Fundo</strong> no submenu</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body">Clique na cor desejada. Para remover, escolha <strong>Padrão</strong> no topo do menu</div></div>
+      </div>
+    </div>
+
+    <div class="tip-box warn-box">
+      <span class="tip-box-icon">⚠️</span>
+      <div><strong>Limitação real:</strong> O Notion não suporta cores hex/RGB customizadas. Se você precisa de uma paleta de marca específica, terá que adaptar ao que a paleta do Notion oferece.</div>
+    </div>
+  </section>
+
+  <!-- ── CAPÍTULO 3: COLUNAS ── -->
+  <section class="chapter" id="ch-colunas">
+    <div class="chapter-number">Capítulo 03</div>
+    <h2>Divisão em Colunas</h2>
+    <p class="chapter-intro">
+      Colunas no Notion são criadas arrastando blocos lado a lado — não existe um botão direto "inserir colunas". É um comportamento emergente do sistema de blocos.
+    </p>
+
+    <div class="topic">
+      <div class="topic-title">Como Criar Colunas</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body">Passe o mouse sobre um bloco existente — o ícone <strong>⠿</strong> (6 pontos) aparece à esquerda</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body"><strong>Clique e arraste</strong> o ícone ⠿ de um bloco até a direita de outro bloco. Uma linha azul vertical indica onde o bloco será solto</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body">Solte — os dois blocos viram colunas lado a lado. Repita para adicionar mais colunas (até 5 recomendado)</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body">Para <strong>redimensionar</strong>, clique e arraste a linha divisória entre as colunas</div></div>
+      </div>
+    </div>
+
+    <!-- MOCK 2 COLUNAS -->
+    <div class="topic">
+      <div class="topic-title">Exemplo: 2 Colunas</div>
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+          <div class="mock-page-title" style="font-size:20px; margin-bottom:16px;">📋 Plano de Ação</div>
+          <div class="mock-columns" style="position:relative;">
+            <div class="mock-column">
+              <div style="font-size:13px; font-weight:700; color:#1a1814; margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid #e2ddd8;">✅ A Fazer</div>
+              <div class="mock-line">• Revisar proposta técnica</div>
+              <div class="mock-line">• Agendar reunião com cliente</div>
+              <div class="mock-line">• Atualizar cronograma</div>
+            </div>
+            <div style="width:1px; background:#e2ddd8; margin:0 8px; flex-shrink:0;"></div>
+            <div class="mock-column">
+              <div style="font-size:13px; font-weight:700; color:#1a1814; margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid #e2ddd8;">🔄 Em Andamento</div>
+              <div class="mock-line">• Desenvolvimento do módulo X</div>
+              <div class="mock-line">• Revisão de documentos</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 3.1 — Layout de 2 colunas com divisor visual</p>
+    </div>
+
+    <!-- MOCK 3 COLUNAS -->
+    <div class="topic">
+      <div class="topic-title">Exemplo: 3 Colunas</div>
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+          <div class="mock-page-title" style="font-size:20px; margin-bottom:16px;">📊 Dashboard Semanal</div>
+          <div class="mock-columns">
+            <div class="mock-column" style="background:#fafaf8; border-radius:6px; padding:10px;">
+              <div style="font-size:12px; font-weight:700; color:var(--notion-green); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">🟢 Concluído</div>
+              <div class="mock-line" style="font-size:13px;">Tarefa A</div>
+              <div class="mock-line" style="font-size:13px;">Tarefa B</div>
+            </div>
+            <div class="mock-column" style="background:#fafaf8; border-radius:6px; padding:10px;">
+              <div style="font-size:12px; font-weight:700; color:var(--notion-orange); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">🟡 Em Progresso</div>
+              <div class="mock-line" style="font-size:13px;">Tarefa C</div>
+            </div>
+            <div class="mock-column" style="background:#fafaf8; border-radius:6px; padding:10px;">
+              <div style="font-size:12px; font-weight:700; color:var(--notion-red); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;">🔴 Pendente</div>
+              <div class="mock-line" style="font-size:13px;">Tarefa D</div>
+              <div class="mock-line" style="font-size:13px;">Tarefa E</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 3.2 — Layout de 3 colunas com cards de status</p>
+    </div>
+
+    <div class="tip-box">
+      <span class="tip-box-icon">💡</span>
+      <div><strong>Atalho alternativo:</strong> Digite <code style="font-family:var(--font-mono); font-size:12px; background:rgba(135,131,120,0.15); padding:1px 5px; border-radius:3px;">/coluna</code> ou <code style="font-family:var(--font-mono); font-size:12px; background:rgba(135,131,120,0.15); padding:1px 5px; border-radius:3px;">/column</code> para inserir um bloco de 2 colunas já formatado, sem precisar arrastar.</div>
+    </div>
+
+    <div class="tip-box warn-box">
+      <span class="tip-box-icon">⚠️</span>
+      <div><strong>Limitação:</strong> Colunas no Notion <strong>não funcionam em dispositivos mobile</strong> da forma esperada — elas são exibidas empilhadas verticalmente. Considere isso ao projetar páginas que serão acessadas pelo celular.</div>
+    </div>
+  </section>
+
+  <!-- ── CAPÍTULO 4: PÍLULAS / TAGS ── -->
+  <section class="chapter" id="ch-pilulas">
+    <div class="chapter-number">Capítulo 04</div>
+    <h2>Pílulas &amp; Tags</h2>
+    <p class="chapter-intro">
+      "Pílulas" é o nome informal para os <strong>valores de propriedades Select e Multi-select</strong> em Databases do Notion. Cada valor tem uma cor associada, formando as etiquetas coloridas que identificam status, categorias e prioridades.
+    </p>
+
+    <div class="topic">
+      <div class="topic-title">Select vs. Multi-select</div>
+      <p class="topic-desc">
+        <strong>Select</strong> permite apenas uma opção por entrada. <strong>Multi-select</strong> permite múltiplas. Ambos geram as pílulas visuais.
+      </p>
+
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+          <!-- Database mock -->
+          <div style="font-size:14px; font-weight:600; color:#5a5650; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.08em; font-size:11px;">Banco de Tarefas</div>
+          
+          <!-- Table header -->
+          <div style="display:grid; grid-template-columns:1fr 100px 140px 160px; gap:0; border:1px solid #e2ddd8; border-radius:6px; overflow:hidden; font-size:13px;">
+            <!-- Header -->
+            <div style="padding:8px 12px; background:#f7f6f3; font-weight:600; color:#5a5650; border-bottom:1px solid #e2ddd8; font-size:11px; text-transform:uppercase; letter-spacing:0.08em;">Nome</div>
+            <div style="padding:8px 12px; background:#f7f6f3; font-weight:600; color:#5a5650; border-bottom:1px solid #e2ddd8; font-size:11px; text-transform:uppercase; letter-spacing:0.08em;">Status</div>
+            <div style="padding:8px 12px; background:#f7f6f3; font-weight:600; color:#5a5650; border-bottom:1px solid #e2ddd8; font-size:11px; text-transform:uppercase; letter-spacing:0.08em;">Prioridade</div>
+            <div style="padding:8px 12px; background:#f7f6f3; font-weight:600; color:#5a5650; border-bottom:1px solid #e2ddd8; font-size:11px; text-transform:uppercase; letter-spacing:0.08em;">Tags</div>
+
+            <!-- Row 1 -->
+            <div style="padding:10px 12px; border-bottom:1px solid #f0ede8;">Revisar proposta</div>
+            <div style="padding:10px 12px; border-bottom:1px solid #f0ede8;">
+              <span class="mock-pill fg-green bg-green">✅ Feito</span>
+            </div>
+            <div style="padding:10px 12px; border-bottom:1px solid #f0ede8;">
+              <span class="mock-pill fg-orange bg-orange">🔶 Média</span>
+            </div>
+            <div style="padding:10px 12px; border-bottom:1px solid #f0ede8;">
+              <span class="mock-pill fg-blue bg-blue">Docs</span>
+              <span class="mock-pill fg-purple bg-purple">Cliente</span>
+            </div>
+
+            <!-- Row 2 -->
+            <div style="padding:10px 12px; border-bottom:1px solid #f0ede8;">Deploy v2.0</div>
+            <div style="padding:10px 12px; border-bottom:1px solid #f0ede8;">
+              <span class="mock-pill fg-orange bg-orange">🔄 Em Progresso</span>
+            </div>
+            <div style="padding:10px 12px; border-bottom:1px solid #f0ede8;">
+              <span class="mock-pill fg-red bg-red">🔴 Alta</span>
+            </div>
+            <div style="padding:10px 12px; border-bottom:1px solid #f0ede8;">
+              <span class="mock-pill fg-green bg-green">Dev</span>
+              <span class="mock-pill fg-gray bg-gray">Infra</span>
+            </div>
+
+            <!-- Row 3 -->
+            <div style="padding:10px 12px;">Relatório mensal</div>
+            <div style="padding:10px 12px;">
+              <span class="mock-pill fg-gray bg-gray">⏳ Pendente</span>
+            </div>
+            <div style="padding:10px 12px;">
+              <span class="mock-pill fg-yellow bg-yellow">🟡 Baixa</span>
+            </div>
+            <div style="padding:10px 12px;">
+              <span class="mock-pill fg-brown bg-brown">Relatório</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 4.1 — Database com propriedades Select (Status, Prioridade) e Multi-select (Tags)</p>
+    </div>
+
+    <!-- CRIANDO OPÇÕES -->
+    <div class="topic">
+      <div class="topic-title">Criando e Colorindo uma Pílula</div>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-body">Em um Database, clique no <strong>+</strong> para adicionar uma propriedade. Escolha <strong>Select</strong> ou <strong>Multi-select</strong></div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-body">Clique em uma célula dessa coluna. Digite o nome da opção (ex: "Em Progresso") e pressione Enter</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-body">Para <strong>escolher a cor</strong>: clique nos três pontos <strong>⋯</strong> ao lado da opção criada e selecione a cor</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-body">A cor fica salva para todos os usos futuros daquela opção no mesmo banco</div></div>
+      </div>
+    </div>
+
+    <!-- PALETA DE PILULAS -->
+    <div class="topic">
+      <div class="topic-title">Paleta de Cores das Pílulas</div>
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body" style="padding:20px 24px;">
+          <div style="margin-bottom:12px;">
+            <span class="mock-pill fg-gray bg-gray">Cinza</span>
+            <span class="mock-pill fg-brown bg-brown">Marrom</span>
+            <span class="mock-pill fg-orange bg-orange">Laranja</span>
+            <span class="mock-pill fg-yellow bg-yellow">Amarelo</span>
+            <span class="mock-pill fg-green bg-green">Verde</span>
+            <span class="mock-pill fg-blue bg-blue">Azul</span>
+            <span class="mock-pill fg-purple bg-purple">Roxo</span>
+            <span class="mock-pill fg-pink bg-pink">Rosa</span>
+            <span class="mock-pill fg-red bg-red">Vermelho</span>
+          </div>
+          <div>
+            <span class="mock-pill fg-green bg-green">✅ Aprovado</span>
+            <span class="mock-pill fg-red bg-red">❌ Rejeitado</span>
+            <span class="mock-pill fg-orange bg-orange">⏳ Aguardando</span>
+            <span class="mock-pill fg-blue bg-blue">📋 Revisão</span>
+            <span class="mock-pill fg-purple bg-purple">💡 Ideia</span>
+          </div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 4.2 — Paleta completa de pílulas e exemplos de uso</p>
+    </div>
+  </section>
+
+  <!-- ── CAPÍTULO 5: CITAÇÕES E CALLOUTS ── -->
+  <section class="chapter" id="ch-citacoes">
+    <div class="chapter-number">Capítulo 05</div>
+    <h2>Citações &amp; Callouts</h2>
+    <p class="chapter-intro">
+      São dois tipos de blocos distintos. <strong>Quote</strong> (citação) é para destacar trechos de texto com linha lateral — mais editorial. <strong>Callout</strong> é uma caixa de destaque com ícone, ideal para dicas, avisos e observações.
+    </p>
+
+    <!-- QUOTE -->
+    <div class="topic">
+      <div class="topic-title">Bloco de Citação (Quote)</div>
+      <p class="topic-desc">Use <strong>/quote</strong> ou <strong>/citação</strong> para inserir. Cria uma linha cinza à esquerda com recuo, visualmente parecido com citações em artigos.</p>
+
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+          <div class="mock-line" style="margin-bottom:10px;">No artigo de revisão, o autor destaca:</div>
+          <div class="mock-quote">
+            A produtividade não é sobre fazer mais coisas. É sobre fazer as coisas certas com intenção clara e energia focada.
+          </div>
+          <div class="mock-line" style="margin-top:10px; color:#9a9590; font-size:12px;">— James Clear, Atomic Habits</div>
+          <div class="mock-line" style="margin-top:14px;">Outro exemplo, mais curto:</div>
+          <div class="mock-quote" style="font-weight:600;">
+            Simplicidade é a sofisticação máxima.
+          </div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 5.1 — Blocos Quote em uso editorial</p>
+    </div>
+
+    <!-- CALLOUT -->
+    <div class="topic">
+      <div class="topic-title">Bloco Callout</div>
+      <p class="topic-desc">Use <strong>/callout</strong> para inserir. O bloco tem fundo colorido e ícone customizável — é o mais versátil para guias, documentações e notas.</p>
+
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+          <!-- Info callout -->
+          <div class="mock-callout" style="background:rgba(51,126,169,0.12); margin-bottom:8px;">
+            <span class="mock-callout-icon">ℹ️</span>
+            <div class="mock-line">Esta seção está em revisão. O conteúdo pode mudar até o dia 30.</div>
+          </div>
+
+          <!-- Warning callout -->
+          <div class="mock-callout" style="background:rgba(203,145,47,0.14); margin-bottom:8px;">
+            <span class="mock-callout-icon">⚠️</span>
+            <div class="mock-line"><strong>Atenção:</strong> Nunca compartilhe as chaves de API nesta página com usuários externos.</div>
+          </div>
+
+          <!-- Tip callout -->
+          <div class="mock-callout" style="background:rgba(68,131,97,0.12); margin-bottom:8px;">
+            <span class="mock-callout-icon">💡</span>
+            <div class="mock-line"><strong>Dica:</strong> Você pode clicar no ícone do Callout para trocá-lo por qualquer emoji ou ícone da biblioteca.</div>
+          </div>
+
+          <!-- Danger callout -->
+          <div class="mock-callout" style="background:rgba(212,76,71,0.12);">
+            <span class="mock-callout-icon">🚨</span>
+            <div class="mock-line"><strong>Crítico:</strong> Esta ação é irreversível. Confirme antes de prosseguir.</div>
+          </div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 5.2 — Variações de Callout por intenção (info, aviso, dica, crítico)</p>
+    </div>
+
+    <!-- DIFERENÇA -->
+    <div class="topic">
+      <div class="topic-title">Quando Usar Cada Um</div>
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <div>
+              <div style="font-weight:700; font-size:13px; margin-bottom:8px; color:#1a1814;">Quote — use quando...</div>
+              <div class="mock-line" style="font-size:13px;">• Citar falas, trechos de livros</div>
+              <div class="mock-line" style="font-size:13px;">• Destacar frases de impacto</div>
+              <div class="mock-line" style="font-size:13px;">• Estilo mais editorial/clean</div>
+              <div class="mock-line" style="font-size:13px;">• Contexto de escrita/texto</div>
+            </div>
+            <div>
+              <div style="font-weight:700; font-size:13px; margin-bottom:8px; color:#1a1814;">Callout — use quando...</div>
+              <div class="mock-line" style="font-size:13px;">• Avisos, dicas, alertas</div>
+              <div class="mock-line" style="font-size:13px;">• Guias e documentações</div>
+              <div class="mock-line" style="font-size:13px;">• Precisa de ícone visual</div>
+              <div class="mock-line" style="font-size:13px;">• Fundo colorido faz sentido</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 5.3 — Critérios de escolha entre Quote e Callout</p>
+    </div>
+  </section>
+
+  <!-- ── CAPÍTULO 6: DIVISORES E TOGGLES ── -->
+  <section class="chapter" id="ch-divisores">
+    <div class="chapter-number">Capítulo 06</div>
+    <h2>Divisores &amp; Toggles</h2>
+    <p class="chapter-intro">
+      Dois blocos simples mas que fazem diferença na organização visual de páginas longas: o <strong>Divider</strong> separa seções com uma linha horizontal, e o <strong>Toggle</strong> permite ocultar/revelar conteúdo sob demanda.
+    </p>
+
+    <!-- DIVIDER -->
+    <div class="topic">
+      <div class="topic-title">Divisor (Divider)</div>
+      <p class="topic-desc">Digite <strong>---</strong> (três traços) em uma linha vazia e pressione Enter. Uma linha horizontal é criada. Ou use <strong>/divisor</strong> / <strong>/divider</strong>.</p>
+
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+          <div style="font-size:18px; font-weight:700; margin-bottom:8px; font-family:var(--font-display);">Resultados do Trimestre</div>
+          <div class="mock-line">Receita total: R$ 450.000</div>
+          <div class="mock-line">Crescimento: +18% vs ano anterior</div>
+
+          <hr class="mock-divider" style="margin:16px 0;">
+
+          <div style="font-size:18px; font-weight:700; margin-bottom:8px; font-family:var(--font-display);">Próximos Passos</div>
+          <div class="mock-line">• Revisão de metas para Q2</div>
+          <div class="mock-line">• Contratação de 2 analistas</div>
+
+          <hr class="mock-divider" style="margin:16px 0;">
+
+          <div class="mock-line" style="color:#9a9590; font-size:13px;">Atualizado em: 27 Mar 2025</div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 6.1 — Divisores separando seções de uma página</p>
+    </div>
+
+    <!-- TOGGLE -->
+    <div class="topic">
+      <div class="topic-title">Toggle (Conteúdo Recolhível)</div>
+      <p class="topic-desc">Use <strong>/toggle</strong> ou <strong>&gt;</strong> + espaço para criar. Clique na seta para expandir ou recolher. Você pode aninhar qualquer bloco dentro de um Toggle — inclusive outros Toggles.</p>
+
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+
+          <!-- Toggle fechado -->
+          <div class="mock-toggle" id="t1" onclick="toggleEl('t1')">
+            <span class="mock-toggle-arrow">▶</span>
+            <span>📁 Fase 1 — Levantamento de Requisitos</span>
+          </div>
+          <div class="mock-toggle-content" id="t1c">
+            <div class="mock-line">• Reunião com stakeholders</div>
+            <div class="mock-line">• Mapeamento de processos</div>
+            <div class="mock-line">• Validação com usuário final</div>
+          </div>
+
+          <!-- Toggle aberto -->
+          <div class="mock-toggle open" id="t2" onclick="toggleEl('t2')" style="margin-top:4px;">
+            <span class="mock-toggle-arrow">▶</span>
+            <span>📋 Fase 2 — Especificação Técnica</span>
+          </div>
+          <div class="mock-toggle-content" id="t2c" style="display:block;">
+            <div class="mock-line">• Definição de arquitetura</div>
+            <div class="mock-line">• Elaboração dos requisitos funcionais</div>
+            <div class="mock-line">• Validação com equipe dev</div>
+          </div>
+
+          <div class="mock-toggle" id="t3" onclick="toggleEl('t3')" style="margin-top:4px;">
+            <span class="mock-toggle-arrow">▶</span>
+            <span>🚀 Fase 3 — Desenvolvimento</span>
+          </div>
+          <div class="mock-toggle-content" id="t3c">
+            <div class="mock-line">• Sprint 1: módulo de autenticação</div>
+            <div class="mock-line">• Sprint 2: módulo de relatórios</div>
+          </div>
+
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 6.2 — Toggles interativos (clique nas setas para testar)</p>
+    </div>
+
+    <div class="tip-box">
+      <span class="tip-box-icon">💡</span>
+      <div><strong>Toggle + Heading:</strong> Você pode transformar um Heading em Toggle Heading usando <strong>/toggle heading</strong>. Isso permite que seções inteiras sejam recolhíveis — ótimo para páginas longas de documentação.</div>
+    </div>
+  </section>
+
+  <!-- ── CAPÍTULO 7: COMANDO / ── -->
+  <section class="chapter" id="ch-slash">
+    <div class="chapter-number">Capítulo 07</div>
+    <h2>O Comando <code style="font-family:var(--font-mono); font-size:26px;">/</code></h2>
+    <p class="chapter-intro">
+      O atalho mais poderoso do Notion. Em qualquer linha vazia — ou em qualquer ponto de uma linha — pressione <strong>/</strong> para abrir o menu de blocos. Você pode digitar o nome do bloco para filtrar.
+    </p>
+
+    <div class="topic">
+      <div class="topic-title">O Menu de Comando</div>
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+          <div class="mock-line" style="margin-bottom:12px;">Linha de texto qualquer... e aqui começo a digitar /</div>
+          <div class="mock-slash-menu">
+            <div class="mock-slash-search">
+              <span style="color:#9a9590;">/</span>
+              <span style="color:#37352f;">callout</span>
+              <span style="color:#9a9590; margin-left:auto; font-size:11px;">filtrado</span>
+            </div>
+            <div class="mock-slash-item selected">
+              <div class="mock-slash-item-icon">💬</div>
+              <div class="mock-slash-item-info">
+                <div class="mock-slash-item-name">Callout</div>
+                <div class="mock-slash-item-desc">Caixa de destaque com ícone</div>
+              </div>
+            </div>
+            <div class="mock-slash-item">
+              <div class="mock-slash-item-icon" style="font-size:11px; font-family:var(--font-mono);">&lt;/&gt;</div>
+              <div class="mock-slash-item-info">
+                <div class="mock-slash-item-name">Code</div>
+                <div class="mock-slash-item-desc">Bloco de código com sintaxe</div>
+              </div>
+            </div>
+            <div class="mock-slash-item">
+              <div class="mock-slash-item-icon">📁</div>
+              <div class="mock-slash-item-info">
+                <div class="mock-slash-item-name">Página</div>
+                <div class="mock-slash-item-desc">Sub-página dentro desta página</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 7.1 — Menu / com busca "callout" filtrando resultados</p>
+    </div>
+
+    <!-- COMANDOS MAIS USADOS -->
+    <div class="topic">
+      <div class="topic-title">Comandos / Mais Usados</div>
+      <table class="shortcut-table">
+        <thead>
+          <tr>
+            <th>Comando</th>
+            <th>O que cria</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="ks">/h1</span> <span class="ks">/h2</span> <span class="ks">/h3</span></td><td>Cabeçalhos nível 1, 2 e 3</td></tr>
+          <tr><td><span class="ks">/bullet</span></td><td>Lista com marcadores</td></tr>
+          <tr><td><span class="ks">/numbered</span></td><td>Lista numerada</td></tr>
+          <tr><td><span class="ks">/todo</span></td><td>Lista de checklist (checkbox)</td></tr>
+          <tr><td><span class="ks">/toggle</span></td><td>Bloco recolhível</td></tr>
+          <tr><td><span class="ks">/quote</span></td><td>Bloco de citação</td></tr>
+          <tr><td><span class="ks">/callout</span></td><td>Caixa de destaque</td></tr>
+          <tr><td><span class="ks">/divider</span></td><td>Linha divisória horizontal</td></tr>
+          <tr><td><span class="ks">/code</span></td><td>Bloco de código</td></tr>
+          <tr><td><span class="ks">/table</span></td><td>Tabela simples</td></tr>
+          <tr><td><span class="ks">/columns</span></td><td>Layout em 2 colunas</td></tr>
+          <tr><td><span class="ks">/image</span></td><td>Inserir imagem</td></tr>
+          <tr><td><span class="ks">/embed</span></td><td>Incorporar link externo</td></tr>
+          <tr><td><span class="ks">/date</span></td><td>Mencionar data</td></tr>
+          <tr><td><span class="ks">/page</span></td><td>Criar sub-página</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CODE BLOCK -->
+    <div class="topic">
+      <div class="topic-title">Bloco de Código (<code style="font-family:var(--font-mono); font-size:14px;">/code</code>)</div>
+      <p class="topic-desc">Insere um bloco com fundo cinza claro, fonte monoespaçada e seletor de linguagem. Útil para documentação técnica.</p>
+
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+          <div class="mock-code-block">
+            <span class="mock-code-lang">Python</span>
+            <div>def calcular_media(valores):</div>
+            <div style="padding-left:20px;">total = sum(valores)</div>
+            <div style="padding-left:20px;">return total / len(valores)</div>
+            <div style="margin-top:8px; color:#9a9590;"># Exemplo de uso</div>
+            <div>notas = [8.5, 9.0, 7.5, 10.0]</div>
+            <div>print(calcular_media(notas))</div>
+          </div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 7.2 — Bloco de código Python no Notion</p>
+    </div>
+  </section>
+
+  <!-- ── CAPÍTULO 8: ATALHOS ── -->
+  <section class="chapter" id="ch-atalhos">
+    <div class="chapter-number">Capítulo 08</div>
+    <h2>Atalhos Essenciais de Teclado</h2>
+    <p class="chapter-intro">
+      Dominar os atalhos do Notion elimina grande parte do atrito com a interface. A maioria segue o padrão dos editores de texto comuns — com algumas exceções específicas da plataforma.
+    </p>
+
+    <div class="topic">
+      <div class="topic-title">Formatação de Texto</div>
+      <table class="shortcut-table">
+        <thead>
+          <tr><th>Ação</th><th>Windows/Linux</th><th>Mac</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Negrito</td><td><span class="ks">Ctrl</span> + <span class="ks">B</span></td><td><span class="ks">⌘</span> + <span class="ks">B</span></td></tr>
+          <tr><td>Itálico</td><td><span class="ks">Ctrl</span> + <span class="ks">I</span></td><td><span class="ks">⌘</span> + <span class="ks">I</span></td></tr>
+          <tr><td>Sublinhado</td><td><span class="ks">Ctrl</span> + <span class="ks">U</span></td><td><span class="ks">⌘</span> + <span class="ks">U</span></td></tr>
+          <tr><td>Tachado</td><td><span class="ks">Ctrl</span> + <span class="ks">Shift</span> + <span class="ks">S</span></td><td><span class="ks">⌘</span> + <span class="ks">Shift</span> + <span class="ks">S</span></td></tr>
+          <tr><td>Código inline</td><td><span class="ks">Ctrl</span> + <span class="ks">E</span></td><td><span class="ks">⌘</span> + <span class="ks">E</span></td></tr>
+          <tr><td>Link</td><td><span class="ks">Ctrl</span> + <span class="ks">K</span></td><td><span class="ks">⌘</span> + <span class="ks">K</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Blocos &amp; Estrutura</div>
+      <table class="shortcut-table">
+        <thead>
+          <tr><th>Ação</th><th>Atalho</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Menu de blocos</td><td><span class="ks">/</span> (em linha vazia ou no meio do texto)</td></tr>
+          <tr><td>Transformar bloco em H1</td><td><span class="ks">#</span> + Espaço</td></tr>
+          <tr><td>Transformar bloco em H2</td><td><span class="ks">##</span> + Espaço</td></tr>
+          <tr><td>Transformar bloco em H3</td><td><span class="ks">###</span> + Espaço</td></tr>
+          <tr><td>Lista com marcadores</td><td><span class="ks">-</span> + Espaço ou <span class="ks">*</span> + Espaço</td></tr>
+          <tr><td>Lista numerada</td><td><span class="ks">1.</span> + Espaço</td></tr>
+          <tr><td>Checkbox (todo)</td><td><span class="ks">[]</span> + Espaço</td></tr>
+          <tr><td>Toggle</td><td><span class="ks">&gt;</span> + Espaço</td></tr>
+          <tr><td>Citação (quote)</td><td><span class="ks">"</span> + Espaço</td></tr>
+          <tr><td>Divisor</td><td><span class="ks">---</span> + Enter</td></tr>
+          <tr><td>Duplicar bloco</td><td><span class="ks">Ctrl</span> + <span class="ks">D</span></td></tr>
+          <tr><td>Deletar bloco</td><td><span class="ks">Ctrl</span> + <span class="ks">Shift</span> + <span class="ks">Delete</span></td></tr>
+          <tr><td>Mover bloco para cima/baixo</td><td><span class="ks">Ctrl</span> + <span class="ks">Shift</span> + <span class="ks">↑↓</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="topic">
+      <div class="topic-title">Navegação &amp; Interface</div>
+      <table class="shortcut-table">
+        <thead>
+          <tr><th>Ação</th><th>Atalho</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Busca global</td><td><span class="ks">Ctrl</span> + <span class="ks">P</span> ou <span class="ks">Ctrl</span> + <span class="ks">K</span></td></tr>
+          <tr><td>Nova página</td><td><span class="ks">Ctrl</span> + <span class="ks">N</span></td></tr>
+          <tr><td>Modo tela cheia</td><td><span class="ks">Ctrl</span> + <span class="ks">Shift</span> + <span class="ks">F</span></td></tr>
+          <tr><td>Modo escuro/claro</td><td><span class="ks">Ctrl</span> + <span class="ks">Shift</span> + <span class="ks">L</span></td></tr>
+          <tr><td>Expandir/recolher sidebar</td><td><span class="ks">Ctrl</span> + <span class="ks">\</span></td></tr>
+          <tr><td>Voltar página</td><td><span class="ks">Ctrl</span> + <span class="ks">[</span></td></tr>
+          <tr><td>Avançar página</td><td><span class="ks">Ctrl</span> + <span class="ks">]</span></td></tr>
+          <tr><td>Comentar em bloco</td><td><span class="ks">Ctrl</span> + <span class="ks">Shift</span> + <span class="ks">M</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- VISUAL KEYBOARD -->
+    <div class="topic">
+      <div class="topic-title">Os Atalhos Mais Usados na Prática</div>
+      <div class="notion-mock">
+        <div class="notion-mock-bar">
+          <div class="mock-dot mock-dot-r"></div>
+          <div class="mock-dot mock-dot-y"></div>
+          <div class="mock-dot mock-dot-g"></div>
+        </div>
+        <div class="notion-mock-body">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div style="background:#fafaf8; border-radius:8px; padding:14px;">
+              <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#9a9590; margin-bottom:10px;">Top 5 — Formatação</div>
+              <div class="mock-line" style="font-size:13px; margin-bottom:6px;"><span class="ks">Ctrl+B</span> Negrito</div>
+              <div class="mock-line" style="font-size:13px; margin-bottom:6px;"><span class="ks">Ctrl+I</span> Itálico</div>
+              <div class="mock-line" style="font-size:13px; margin-bottom:6px;"><span class="ks">Ctrl+E</span> Código inline</div>
+              <div class="mock-line" style="font-size:13px; margin-bottom:6px;"><span class="ks">Ctrl+K</span> Link</div>
+              <div class="mock-line" style="font-size:13px;"><span class="ks">Ctrl+U</span> Sublinhado</div>
+            </div>
+            <div style="background:#fafaf8; border-radius:8px; padding:14px;">
+              <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#9a9590; margin-bottom:10px;">Top 5 — Blocos</div>
+              <div class="mock-line" style="font-size:13px; margin-bottom:6px;"><span class="ks">/</span> Menu de blocos</div>
+              <div class="mock-line" style="font-size:13px; margin-bottom:6px;"><span class="ks"># +espaço</span> Heading</div>
+              <div class="mock-line" style="font-size:13px; margin-bottom:6px;"><span class="ks">- +espaço</span> Lista</div>
+              <div class="mock-line" style="font-size:13px; margin-bottom:6px;"><span class="ks">[] +espaço</span> Checkbox</div>
+              <div class="mock-line" style="font-size:13px;"><span class="ks">---</span> Divisor</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mock-caption">Fig. 8.1 — Os 10 atalhos que cobrem 80% do uso diário</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="book-footer">
+    <div>
+      <span>Notion Básico</span> — Guia Visual de Formatação &amp; Estrutura<br>
+      Conteúdo produzido para usuários com noção básica do Notion
+    </div>
+    <div style="text-align:right;">
+      v1.0 — 2025<br>
+      8 capítulos · Mocks ilustrativos
+    </div>
+  </footer>
+
+</main>
+
+<script>
+  // Progress bar
+  window.addEventListener('scroll', () => {
+    const el = document.getElementById('progress');
+    const scrolled = window.scrollY;
+    const max = document.body.scrollHeight - window.innerHeight;
+    el.style.transform = `scaleX(${scrolled / max})`;
+  });
+
+  // Nav active state
+  function setActive(el) {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Intersection observer for nav
+  const sections = document.querySelectorAll('.chapter, .hero');
+  const navLinks = document.querySelectorAll('.nav-item');
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + id) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  sections.forEach(s => obs.observe(s));
+
+  // Toggle interativo
+  function toggleEl(id) {
+    const toggle = document.getElementById(id);
+    const content = document.getElementById(id + 'c');
+    toggle.classList.toggle('open');
+    content.style.display = toggle.classList.contains('open') ? 'block' : 'none';
+    const arrow = toggle.querySelector('.mock-toggle-arrow');
+    arrow.style.transform = toggle.classList.contains('open') ? 'rotate(90deg)' : '';
+  }
+
+  // Smooth scroll for chips
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
